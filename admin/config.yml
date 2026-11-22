@@ -1,0 +1,55 @@
+# GANTI repo di bawah dengan "usernamegithub/nama-repository" Anda
+backend:
+  name: github
+  repo: Farid252/villa-otwyuks
+  branch: main
+
+media_folder: foto
+public_folder: foto
+
+collections:
+  - name: konten
+    label: Konten Website
+    files:
+      - name: villas
+        label: Daftar Villa
+        file: data/villas.json
+        format: json
+        fields:
+          - label: Villa
+            label_singular: Villa
+            name: villas
+            widget: list
+            summary: "{{fields.name}} ({{fields.category}})"
+            fields:
+              - { label: Nama villa, name: name, widget: string }
+              - { label: Kategori (ketik kategori baru jika perlu), name: category, widget: string }
+              - { label: Lokasi, name: location, widget: string, required: false }
+              - { label: Kapasitas tamu, name: guests, widget: number, value_type: int, min: 0, default: 2 }
+              - { label: Jumlah kamar, name: rooms, widget: number, value_type: int, min: 0, default: 1 }
+              - { label: Harga per malam (Rp), name: price, widget: number, value_type: int, min: 0 }
+              - { label: Deskripsi, name: description, widget: text, required: false }
+              - { label: Fasilitas, name: facilities, widget: list, required: false, hint: "Satu item per fasilitas" }
+              - label: Foto
+                name: photos
+                widget: list
+                required: false
+                hint: "Foto pertama menjadi sampul"
+                fields:
+                  - { label: Foto, name: image, widget: image }
+                  - { label: Keterangan foto, name: caption, widget: string, required: false }
+      - name: settings
+        label: Pengaturan Website
+        file: data/settings.json
+        format: json
+        fields:
+          - { label: Nama website, name: brand, widget: string }
+          - { label: Tagline, name: tagline, widget: string }
+          - { label: Judul besar halaman depan, name: hero_title, widget: string }
+          - { label: Teks di bawah judul besar, name: hero_text, widget: text }
+          - { label: Judul bagian Tentang, name: about_title, widget: string }
+          - { label: Teks bagian Tentang, name: about_text, widget: text }
+          - { label: Nama pengelola, name: manager_name, widget: string }
+          - { label: Jabatan pengelola, name: manager_role, widget: string }
+          - { label: "Nomor WhatsApp (628xxxxxxxxxx, tanpa + dan spasi)", name: wa, widget: string }
+          - { label: Email, name: email, widget: string }

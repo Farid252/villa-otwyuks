@@ -1,0 +1,182 @@
+{
+  "villas": [
+    {
+      "name": "Villa Tepi Laut",
+      "category": "Pantai",
+      "location": "Pantai Selatan",
+      "guests": 6,
+      "rooms": 3,
+      "price": 1800000,
+      "description": "",
+      "facilities": [
+        "Akses langsung ke pantai",
+        "AC di semua kamar",
+        "Wi-Fi cepat",
+        "Dapur lengkap",
+        "Area BBQ",
+        "Parkir 3 mobil"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Karang Biru",
+      "category": "Pantai",
+      "location": "Pantai Utara",
+      "guests": 10,
+      "rooms": 5,
+      "price": 2900000,
+      "description": "",
+      "facilities": [
+        "Akses langsung ke pantai",
+        "AC di semua kamar",
+        "Wi-Fi cepat",
+        "Dapur lengkap",
+        "Area BBQ",
+        "Parkir 3 mobil"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Kabut Pagi",
+      "category": "Pegunungan",
+      "location": "Dataran Tinggi",
+      "guests": 8,
+      "rooms": 4,
+      "price": 1500000,
+      "description": "",
+      "facilities": [
+        "Pemandangan gunung",
+        "Perapian dan air panas",
+        "Wi-Fi",
+        "Dapur lengkap",
+        "Taman dan area api unggun",
+        "Parkir luas"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Pinus",
+      "category": "Pegunungan",
+      "location": "Lereng Pinus",
+      "guests": 5,
+      "rooms": 2,
+      "price": 1100000,
+      "description": "",
+      "facilities": [
+        "Pemandangan gunung",
+        "Perapian dan air panas",
+        "Wi-Fi",
+        "Dapur lengkap",
+        "Taman dan area api unggun",
+        "Parkir luas"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Keluarga Asri",
+      "category": "Keluarga",
+      "location": "Dekat Wisata",
+      "guests": 12,
+      "rooms": 5,
+      "price": 2400000,
+      "description": "",
+      "facilities": [
+        "Kamar luas untuk keluarga",
+        "AC di semua kamar",
+        "Taman bermain anak",
+        "Dapur lengkap",
+        "Ruang karaoke",
+        "Parkir 4 mobil"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Taman Ceria",
+      "category": "Keluarga",
+      "location": "Pusat Kota",
+      "guests": 9,
+      "rooms": 4,
+      "price": 1950000,
+      "description": "",
+      "facilities": [
+        "Kamar luas untuk keluarga",
+        "AC di semua kamar",
+        "Taman bermain anak",
+        "Dapur lengkap",
+        "Ruang karaoke",
+        "Parkir 4 mobil"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Kolam Privat",
+      "category": "Kolam Pribadi",
+      "location": "Area Resort",
+      "guests": 8,
+      "rooms": 4,
+      "price": 3200000,
+      "description": "",
+      "facilities": [
+        "Kolam renang pribadi",
+        "Gazebo tepi kolam",
+        "AC di semua kamar",
+        "Wi-Fi cepat",
+        "Area BBQ",
+        "Dapur lengkap"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Senja",
+      "category": "Romantis",
+      "location": "Tebing Barat",
+      "guests": 2,
+      "rooms": 1,
+      "price": 2100000,
+      "description": "",
+      "facilities": [
+        "Kamar dengan bathtub",
+        "Balkon pemandangan senja",
+        "Sarapan untuk berdua",
+        "Wi-Fi",
+        "AC"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Lembayung",
+      "category": "Romantis",
+      "location": "Tepi Danau",
+      "guests": 2,
+      "rooms": 1,
+      "price": 1750000,
+      "description": "",
+      "facilities": [
+        "Kamar dengan bathtub",
+        "Balkon pemandangan senja",
+        "Sarapan untuk berdua",
+        "Wi-Fi",
+        "AC"
+      ],
+      "photos": []
+    },
+    {
+      "name": "Villa Gathering Luas",
+      "category": "Rombongan",
+      "location": "Area Hijau",
+      "guests": 25,
+      "rooms": 10,
+      "price": 5500000,
+      "description": "",
+      "facilities": [
+        "Aula untuk acara",
+        "Kapasitas hingga 25 tamu",
+        "Lapangan dan area outbound",
+        "Dapur besar",
+        "Sound system",
+        "Parkir bus kecil"
+      ],
+      "photos": []
+    }
+  ]
+}

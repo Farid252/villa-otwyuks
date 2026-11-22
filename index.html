@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Villa OtW.yUkS – Sewa villa harian</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1d1a17;--muted:#6b645d;--card:#f6f3ef;--line:#e6e0d9;--accent:#e8801a;--accent-fg:#fff;--hero:#2a170c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17120e;--fg:#f2ece5;--muted:#aba299;--card:#221b15;--line:#372d24;--hero:#0f0a06;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17120e;--fg:#f2ece5;--muted:#aba299;--card:#221b15;--line:#372d24;--hero:#0f0a06;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Fira Sans",system-ui,sans-serif;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{background:var(--hero);color:#fff}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;flex-wrap:wrap}
+.logo{font-weight:700;font-size:1.5rem;color:var(--accent)}
+.logo small{display:block;font-size:.7rem;font-weight:400;color:#d9cbbd}
+nav{display:flex;gap:22px;font-size:.92rem;flex-wrap:wrap}
+nav a{color:#fff;text-decoration:none}
+nav a:hover,nav a:focus-visible{color:var(--accent)}
+.hero{padding:90px 0 110px;background:linear-gradient(90deg,rgba(15,8,3,.92),rgba(15,8,3,.35)),linear-gradient(135deg,#5b3217,#a85d1f 60%,#3a2112)}
+.hero h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 14px;max-width:16ch}
+.hero p{max-width:46ch;color:#eadfd3;margin:0 0 26px}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-fg);padding:11px 24px;border-radius:3px;text-decoration:none;font-weight:500;border:0;font:inherit;font-weight:500;cursor:pointer}
+.btn:focus-visible,.chip:focus-visible,nav a:focus-visible{outline:3px solid #ffd29c;outline-offset:2px}
+section{padding:64px 0}
+h2{font-size:clamp(1.5rem,3vw,2rem);margin:0 0 8px;line-height:1.25}
+.lead{color:var(--muted);margin:0 0 28px;max-width:60ch}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:8px 18px;border-radius:999px;font:inherit;font-size:.92rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
+.villa{background:var(--card);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.pic{height:160px;display:flex;align-items:flex-end;padding:12px;color:#fff;font-size:.82rem;font-weight:500}
+.pic span{background:rgba(0,0,0,.55);padding:3px 10px;border-radius:3px}
+.villa .body{padding:16px}
+.villa h3{margin:0 0 4px;font-size:1.1rem}
+.meta{color:var(--muted);font-size:.88rem;margin:0 0 12px}
+.price{display:flex;justify-content:space-between;align-items:center;font-weight:600}
+.price small{font-weight:400;color:var(--muted)}
+.price a{color:var(--accent);text-decoration:none;font-size:.9rem;font-weight:500}
+.about{display:grid;grid-template-columns:1fr 1.3fr;gap:40px;align-items:center}
+.photo{aspect-ratio:1;background:linear-gradient(160deg,#7a4a26,#2a170c);position:relative;border-radius:2px}
+.badge{position:absolute;right:-18px;bottom:36px;background:var(--accent);color:#fff;padding:16px 20px;text-align:center;font-weight:600;line-height:1.3}
+.badge b{display:block;font-size:1.6rem}
+footer{background:var(--hero);color:#d9cbbd;padding:36px 0;font-size:.92rem}
+footer a{color:var(--accent)}
+.villa{cursor:pointer}.villa:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.more{color:var(--accent);font-size:.9rem;font-weight:500}
+dialog{border:0;padding:0;border-radius:6px;width:min(760px,94vw);max-height:92vh;background:var(--bg);color:var(--fg);overflow:auto}
+dialog::backdrop{background:rgba(10,5,2,.65)}
+.x{position:absolute;top:10px;right:10px;z-index:2;width:38px;height:38px;border:0;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer}
+.x:focus-visible,.th:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.main{height:min(52vw,360px);background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:14px;color:#fff;font-weight:500}
+.main span{background:rgba(0,0,0,.55);padding:3px 12px;border-radius:3px;font-size:.88rem}
+.thumbs{display:flex;gap:8px;padding:10px 20px 0;overflow-x:auto}
+.th{flex:0 0 76px;height:54px;border-radius:3px;border:2px solid transparent;background-size:cover;background-position:center;cursor:pointer;padding:0}
+.th[aria-current="true"]{border-color:var(--accent)}
+.info{padding:18px 20px 22px}
+.info h3{margin:0 0 4px;font-size:1.4rem}
+.info h4{margin:18px 0 8px;font-size:1rem}
+.fac{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 18px}
+.fac li{padding-left:22px;position:relative;font-size:.94rem}
+.fac li::before{content:"";position:absolute;left:2px;top:.5em;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-weight:600}
+.foot small{font-weight:400;color:var(--muted)}
+@media (max-width:720px){.about{grid-template-columns:1fr}.badge{right:10px}.hero{padding:60px 0 70px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="logo"><span data-s="brand">Villa OtW.yUkS</span><small data-s="tagline">Sewa villa harian</small></div>
+    <nav>
+      <a href="#beranda">Beranda</a><a href="#kategori">Kategori</a><a href="#tentang">Tentang</a><a href="#kontak">Kontak</a>
+    </nav>
+  </div>
+  <div class="hero" id="beranda">
+    <div class="wrap">
+      <h1 data-s="hero_title">Temukan villa yang pas untuk liburan Anda</h1>
+      <p data-s="hero_text"></p>
+      <a class="btn" href="#kategori">Lihat semua villa</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="kategori">
+  <div class="wrap">
+    <h2>Pilih kategori villa</h2>
+    <p class="lead">Klik kategori untuk menyaring daftar villa.</p>
+    <div class="chips" id="chips" role="group" aria-label="Kategori villa"></div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="tentang" style="background:var(--card)">
+  <div class="wrap about">
+    <div class="photo"><div class="badge"><b>10+</b>Tahun<br>pengalaman</div></div>
+    <div>
+      <h2 data-s="about_title"></h2>
+      <p class="lead" style="margin-bottom:14px" data-s="about_text"></p>
+      <p style="margin:0"><b data-s="manager_name"></b><br><span style="color:var(--muted)" data-s="manager_role"></span></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer id="kontak">
+  <div class="wrap">
+    <b>Pesan sekarang</b><br>
+    WhatsApp: <a id="fwa" data-s="wa"></a> · Email: <a id="fem" data-s="email"></a>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dt">
+  <button class="x" id="dx" aria-label="Tutup">×</button>
+  <div class="main" id="dm"></div>
+  <div class="thumbs" id="dth"></div>
+  <div class="info">
+    <h3 id="dt"></h3>
+    <p class="meta" id="dmeta"></p>
+    <p id="ddesc"></p>
+    <h4>Fasilitas villa</h4>
+    <ul class="fac" id="dfac"></ul>
+    <div class="foot"><span id="dprice"></span><a class="btn" id="dwa" target="_blank" rel="noopener">Pesan lewat WhatsApp</a></div>
+  </div>
+</dialog>
+
+<script>
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
+function cover(v){if(v.imgs&&v.imgs.length)return "url('"+v.imgs[0].src+"') center/cover";var c=v.b.split(",");return "linear-gradient(135deg,"+c[0]+","+c[1]+")"}
+var villas=[],WA="";
+var cats=["Semua"].concat(villas.reduce(function(a,v){if(a.indexOf(v.c)<0)a.push(v.c);return a},[]));
+var cur="Semua",chips=document.getElementById("chips"),grid=document.getElementById("grid");
+function rp(n){return "Rp "+n.toLocaleString("id-ID")}
+function render(){
+  chips.innerHTML="";
+  cats.forEach(function(c){
+    var b=document.createElement("button");b.className="chip";b.textContent=c;
+    b.setAttribute("aria-pressed",c===cur);
+    b.onclick=function(){cur=c;render()};
+    chips.appendChild(b);
+  });
+  grid.innerHTML="";
+  villas.filter(function(v){return cur==="Semua"||v.c===cur}).forEach(function(v){
+    var col=v.b.split(",");
+    var d=document.createElement("article");d.className="villa";d.tabIndex=0;d.setAttribute("role","button");d.onclick=function(){openV(v)};d.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();openV(v)}};
+    d.innerHTML='<div class="pic" style="background:'+cover(v)+'"><span>'+esc(v.c)+'</span></div>'+
+    '<div class="body"><h3>'+esc(v.n)+'</h3><p class="meta">'+esc(v.l)+' · '+v.g+' tamu · '+v.k+' kamar</p>'+
+    '<div class="price"><span>'+rp(v.p)+' <small>/ malam</small></span><span class="more">Lihat foto &amp; fasilitas</span></div></div>';
+    grid.appendChild(d);
+  });
+}
+render();
+
+var ROOMS=["Ruang tamu","Kamar tidur utama","Teras dan pemandangan","Dapur","Kamar mandi"];
+var FAC={
+"Pantai":["Akses langsung ke pantai","AC di semua kamar","Wi-Fi cepat","Dapur lengkap","Area BBQ","Parkir 3 mobil"],
+"Pegunungan":["Pemandangan gunung","Perapian dan air panas","Wi-Fi","Dapur lengkap","Taman dan area api unggun","Parkir luas"],
+"Keluarga":["Kamar luas untuk keluarga","AC di semua kamar","Taman bermain anak","Dapur lengkap","Ruang karaoke","Parkir 4 mobil"],
+"Kolam Pribadi":["Kolam renang pribadi","Gazebo tepi kolam","AC di semua kamar","Wi-Fi cepat","Area BBQ","Dapur lengkap"],
+"Romantis":["Kamar dengan bathtub","Balkon pemandangan senja","Sarapan untuk berdua","Wi-Fi","AC","Dekorasi bulan madu (permintaan)"],
+"Rombongan":["Aula untuk acara","Kapasitas hingga 25 tamu","Lapangan dan area outbound","Dapur besar","Sound system","Parkir bus kecil"]
+};
+var dlg=document.getElementById("dlg"),cp=[];
+function pics(v){var c=v.b.split(",");
+  if(v.imgs&&v.imgs.length)return v.imgs.map(function(p){return{bg:"url('"+p.src+"') center/cover",cap:p.cap||v.n}});
+  return ROOMS.map(function(r,i){return{bg:"linear-gradient("+(135+i*40)+"deg,"+(i%2?c[1]:c[0])+","+(i%2?c[0]:c[1])+")",cap:r}})}
+function showPic(i){var m=document.getElementById("dm");m.style.background=cp[i].bg;m.textContent="";
+  var s=document.createElement("span");s.textContent=cp[i].cap;m.appendChild(s);
+  Array.prototype.forEach.call(document.getElementById("dth").children,function(t,j){t.setAttribute("aria-current",j===i)})}
+function openV(v){
+  cp=pics(v);var th=document.getElementById("dth");th.innerHTML="";
+  cp.forEach(function(p,i){var b=document.createElement("button");b.className="th";b.setAttribute("aria-label","Foto "+p.cap);b.style.background=p.bg;b.onclick=function(){showPic(i)};th.appendChild(b)});
+  document.getElementById("dt").textContent=v.n;
+  document.getElementById("dmeta").textContent=v.c+" · "+v.l+" · "+v.g+" tamu · "+v.k+" kamar";
+  document.getElementById("ddesc").textContent=v.desc||"";
+  var f=document.getElementById("dfac");f.innerHTML="";
+  (v.fac&&v.fac.length?v.fac:(FAC[v.c]||[])).forEach(function(x){var li=document.createElement("li");li.textContent=x;f.appendChild(li)});
+  document.getElementById("dprice").innerHTML=rp(v.p)+" <small>/ malam</small>";
+  document.getElementById("dwa").href="https://wa.me/"+WA+"?text="+encodeURIComponent("Halo, saya ingin memesan "+v.n);
+  showPic(0);dlg.showModal();
+}
+document.getElementById("dx").onclick=function(){dlg.close()};
+dlg.addEventListener("click",function(e){if(e.target===dlg)dlg.close()});
+var PAL=["#1f6f8b,#0b3b4f","#4b7a4a,#1f3d20","#a85d1f,#4a2810","#2c8db5,#10455f","#a2475b,#4a1d2b","#6b5a3a,#2f2515","#5c7f3e,#27401a","#8a4f86,#3e1f3d"];
+function loadJSON(u){return fetch(u,{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error(u);return r.json()})}
+Promise.all([loadJSON("data/villas.json"),loadJSON("data/settings.json")]).then(function(a){
+  var V=a[0].villas||[],S=a[1]||{};
+  document.querySelectorAll("[data-s]").forEach(function(el){var k=el.getAttribute("data-s");if(S[k]!=null&&S[k]!=="")el.textContent=S[k]});
+  if(S.brand)document.title=S.brand+" – "+(S.tagline||"");
+  WA=S.wa||"";
+  document.getElementById("fwa").href="https://wa.me/"+WA;
+  document.getElementById("fem").href="mailto:"+(S.email||"");
+  villas=V.map(function(v,i){return{n:v.name||"",c:v.category||"",l:v.location||"",g:+v.guests||0,k:+v.rooms||0,p:+v.price||0,b:PAL[i%PAL.length],desc:v.description||"",fac:v.facilities||[],imgs:(v.photos||[]).filter(function(p){return p.image}).map(function(p){return{src:p.image,cap:p.caption||""}})}});
+  cats=["Semua"].concat(villas.reduce(function(x,v){if(v.c&&x.indexOf(v.c)<0)x.push(v.c);return x},[]));
+  render();
+}).catch(function(){grid.textContent="Data villa gagal dimuat. Buka lewat alamat website, bukan dengan membuka file langsung."});
+</script>
+</body>
+</html>

@@ -1,24 +1,6 @@
 {
   "villas": [
     {
-      "name": "Villa Pinus",
-      "category": "Pegunungan",
-      "location": "Lereng Pinus",
-      "guests": 5,
-      "rooms": 2,
-      "price": 1100000,
-      "description": "",
-      "facilities": [
-        "Pemandangan gunung",
-        "Perapian dan air panas",
-        "Wi-Fi",
-        "Dapur lengkap",
-        "Taman dan area api unggun",
-        "Parkir luas"
-      ],
-      "photos": []
-    },
-    {
       "name": "Villa Keluarga Asri",
       "category": "Keluarga",
       "location": "Dekat Wisata",

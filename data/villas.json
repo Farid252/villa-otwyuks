@@ -1,24 +1,6 @@
 {
   "villas": [
     {
-      "name": "Villa Kabut Pagi",
-      "category": "Pegunungan",
-      "location": "Dataran Tinggi",
-      "guests": 8,
-      "rooms": 4,
-      "price": 1500000,
-      "description": "",
-      "facilities": [
-        "Pemandangan gunung",
-        "Perapian dan air panas",
-        "Wi-Fi",
-        "Dapur lengkap",
-        "Taman dan area api unggun",
-        "Parkir luas"
-      ],
-      "photos": []
-    },
-    {
       "name": "Villa Pinus",
       "category": "Pegunungan",
       "location": "Lereng Pinus",

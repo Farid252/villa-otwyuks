@@ -159,24 +159,6 @@
         "AC"
       ],
       "photos": []
-    },
-    {
-      "name": "Villa Gathering Luas",
-      "category": "Rombongan",
-      "location": "Area Hijau",
-      "guests": 25,
-      "rooms": 10,
-      "price": 5500000,
-      "description": "",
-      "facilities": [
-        "Aula untuk acara",
-        "Kapasitas hingga 25 tamu",
-        "Lapangan dan area outbound",
-        "Dapur besar",
-        "Sound system",
-        "Parkir bus kecil"
-      ],
-      "photos": []
     }
   ]
 }

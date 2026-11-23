@@ -1,24 +1,6 @@
 {
   "villas": [
     {
-      "name": "Villa Taman Ceria",
-      "category": "Keluarga",
-      "location": "Pusat Kota",
-      "guests": 9,
-      "rooms": 4,
-      "price": 1950000,
-      "description": "",
-      "facilities": [
-        "Kamar luas untuk keluarga",
-        "AC di semua kamar",
-        "Taman bermain anak",
-        "Dapur lengkap",
-        "Ruang karaoke",
-        "Parkir 4 mobil"
-      ],
-      "photos": []
-    },
-    {
       "name": "Villa Kolam Privat",
       "category": "Kolam Pribadi",
       "location": "Area Resort",

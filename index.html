@@ -45,7 +45,7 @@ h2{font-size:clamp(1.5rem,3vw,2rem);margin:0 0 8px;line-height:1.25}
 .photo{aspect-ratio:1;background:linear-gradient(160deg,#7a4a26,#2a170c);position:relative;border-radius:2px}
 .badge{position:absolute;right:-18px;bottom:36px;background:var(--accent);color:#fff;padding:16px 20px;text-align:center;font-weight:600;line-height:1.3}
 .badge b{display:block;font-size:1.6rem}
-.badge img{display:block;max-width:120px;max-height:80px;width:auto;height:auto;margin:0 auto}
+.photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:12%}
 footer{background:var(--hero);color:#d9cbbd;padding:36px 0;font-size:.92rem}
 footer a{color:var(--accent)}
 .villa{cursor:pointer}.villa:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.more{color:var(--accent);font-size:.9rem;font-weight:500}
@@ -200,7 +200,7 @@ Promise.all([loadJSON("data/villas.json"),loadJSON("data/settings.json")]).then(
   document.querySelectorAll("[data-s]").forEach(function(el){var k=el.getAttribute("data-s");if(S[k]!=null&&S[k]!=="")el.textContent=S[k]});
   if(S.brand)document.title=S.brand+" – "+(S.tagline||"");
   WA=S.wa||"";
-  if(S.about_logo){var bd=document.querySelector(".badge");if(bd){bd.innerHTML="";var li=document.createElement("img");li.alt=S.brand||"Logo";li.src=encodeURI(S.about_logo);bd.appendChild(li)}}
+  if(S.about_logo){var ph=document.querySelector(".photo");if(ph){var li=document.createElement("img");li.alt=S.brand||"Logo";li.src=encodeURI(S.about_logo);ph.insertBefore(li,ph.firstChild)}}
   if(S.hero_image){document.querySelector(".hero").style.background="linear-gradient(90deg,rgba(15,8,3,.88),rgba(15,8,3,.3)),url('"+encodeURI(S.hero_image)+"') center/cover no-repeat"}
   document.getElementById("fwa").href="https://wa.me/"+WA;
   document.getElementById("fem").href="mailto:"+(S.email||"");

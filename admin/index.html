@@ -132,7 +132,7 @@ var GROUPS=[
   {k:"about_text",l:"Isi perkenalan",h:"Ceritakan usaha Anda dalam 2-3 kalimat.",w:"Bagian Tentang",long:1},
   {k:"manager_name",l:"Nama pengelola",h:"Nama yang tampil di bawah teks perkenalan.",w:"Bagian Tentang"},
   {k:"manager_role",l:"Jabatan pengelola",h:"Contoh: Pemilik, General Manager.",w:"Bagian Tentang"},
-  {k:"about_logo",l:"Logo di kotak oranye",h:"Logo tampil di kotak oranye pada foto bagian Tentang, menggantikan tulisan 10+ Tahun pengalaman. Paling bagus PNG dengan latar transparan, berwarna putih atau terang agar terbaca di atas warna oranye. Jika kosong, tulisan 10+ Tahun pengalaman tetap tampil.",w:"Kotak oranye di bagian Tentang",img:1,up:"upLogo",empty:"Belum ada logo. Kotak oranye menampilkan tulisan 10+ Tahun pengalaman.",bg:"var(--accent,#e8821a)"}]},
+  {k:"about_logo",l:"Logo / foto di kotak besar",h:"Logo atau foto yang tampil di kotak besar sebelah kiri bagian Tentang. Logo ditampilkan utuh di tengah kotak. Paling bagus PNG dengan latar transparan. Kotak oranye 10+ Tahun pengalaman tetap ada dan tidak berubah. Jika kosong, kotak besar tetap berwarna coklat.",w:"Kotak besar di bagian Tentang",img:1,up:"upLogo",empty:"Belum ada logo atau foto. Kotak besar tetap berwarna coklat.",bg:"linear-gradient(160deg,#7a4a26,#2a170c)"}]},
  {t:"Kontak pemesanan",d:"Ke mana pesanan dari pengunjung dikirim.",f:[
   {k:"wa",l:"Nomor WhatsApp",h:"Tujuan tombol Pesan lewat WhatsApp. Awali dengan 62, tanpa 0 di depan, tanpa spasi atau tanda +. Contoh: 6281234567890.",w:"Tombol pesan dan footer"},
   {k:"email",l:"Email",h:"Alamat email yang tampil di footer.",w:"Footer"}]}
@@ -279,7 +279,7 @@ function vSettings(){
 function imgField(f){
   var v=S.set[f.k]||"";
   return '<div class="f"><label>'+esc(f.l)+'<span class="w">'+esc(f.w)+'</span></label><p class="h">'+esc(f.h)+'</p>'+
-  (v?'<img class="himg" alt="" '+(f.bg?'style="background:#e8821a;padding:16px;max-width:220px;object-fit:contain" ':'')+'src="'+esc(S.prev[v]||("../"+v))+'">':'<div class="empty" style="padding:22px">'+esc(f.empty||"Belum ada foto. Banner memakai warna coklat bawaan.")+'</div>')+
+  (v?'<img class="himg" alt="" '+(f.bg?'style="background:'+f.bg+';padding:16px;max-width:260px;object-fit:contain" ':'')+'src="'+esc(S.prev[v]||("../"+v))+'">':'<div class="empty" style="padding:22px">'+esc(f.empty||"Belum ada foto. Banner memakai warna coklat bawaan.")+'</div>')+
   '<div class="pb" style="margin-top:10px"><label class="btn ghost sm" style="cursor:pointer">'+(v?(f.up?"Ganti logo":"Ganti foto"):(f.up?"Pilih logo":"Pilih foto"))+'<input type="file" accept="image/*" hidden onchange="'+(f.up||"upHero")+'(this.files[0]);this.value=\'\'"></label>'+(v?'<button class="btn danger sm" onclick="S.set.'+f.k+'=\'\';ch();refSet()">Hapus foto</button>':'')+'</div></div>'
 }
 function refSet(){$("#main").innerHTML=vSettings()}
@@ -293,7 +293,7 @@ function upHero(f){
 function pngShrink(f,mx){return new Promise(function(res,rej){var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var r=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/png"))};im.onerror=function(){rej(new Error(f.name+" bukan gambar yang valid"))};im.src=u})}
 function upLogo(f){
   if(!f)return;toast("Mengunggah logo…");
-  pngShrink(f,500).then(function(d){
+  pngShrink(f,900).then(function(d){
     var name="foto/logo-"+Date.now().toString(36)+".png";
     return api("/contents/"+name,{method:"PUT",body:{message:"Tambah logo via panel admin",content:d.split(",")[1]}}).then(function(){S.prev[name]=d;S.set.about_logo=name;ch();refSet();toast("Logo diunggah. Klik Simpan pengaturan untuk menayangkannya.")})
   }).catch(function(e){toast(errMsg(e),1)})

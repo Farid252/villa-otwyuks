@@ -17,7 +17,28 @@
         "ruang Karoke",
         "Area BBQ"
       ],
-      "photos": []
+      "photos": [
+        {
+          "image": "foto/villa-nirwana-2-mwt3bci70.jpg",
+          "caption": "Ruang Tamu Lt1"
+        },
+        {
+          "image": "foto/villa-nirwana-2-mwt3buc80.jpg",
+          "caption": "Ruang Karoke"
+        },
+        {
+          "image": "foto/villa-nirwana-2-mwt3c45i0.jpg",
+          "caption": "Dapur"
+        },
+        {
+          "image": "foto/villa-nirwana-2-mwt3cjz40.jpg",
+          "caption": "Ruang Tamu Lt2"
+        },
+        {
+          "image": "foto/villa-nirwana-2-mwt3cyc50.jpg",
+          "caption": "Kamar Mandi"
+        }
+      ]
     }
   ]
 }

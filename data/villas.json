@@ -1,3 +1,23 @@
 {
-  "villas": []
+  "villas": [
+    {
+      "name": "Villa Nirwana 2",
+      "category": "keluarga",
+      "location": "",
+      "guests": 30,
+      "rooms": 0,
+      "price": 0,
+      "description": "",
+      "facilities": [
+        "Wi-Fi",
+        "Billiard",
+        "Dapur lengkap",
+        "Kolam renang",
+        "Parkir luas",
+        "ruang Karoke",
+        "Area BBQ"
+      ],
+      "photos": []
+    }
+  ]
 }

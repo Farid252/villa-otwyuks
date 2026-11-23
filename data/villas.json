@@ -1,24 +1,6 @@
 {
   "villas": [
     {
-      "name": "Villa Karang Biru",
-      "category": "Pantai",
-      "location": "Pantai Utara",
-      "guests": 10,
-      "rooms": 5,
-      "price": 2900000,
-      "description": "",
-      "facilities": [
-        "Akses langsung ke pantai",
-        "AC di semua kamar",
-        "Wi-Fi cepat",
-        "Dapur lengkap",
-        "Area BBQ",
-        "Parkir 3 mobil"
-      ],
-      "photos": []
-    },
-    {
       "name": "Villa Kabut Pagi",
       "category": "Pegunungan",
       "location": "Dataran Tinggi",

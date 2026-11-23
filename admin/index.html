@@ -64,6 +64,8 @@ textarea{min-height:96px;resize:vertical}
 /* photos */
 .drop{display:block;border:2px dashed #d9b98f;border-radius:var(--r);background:#fffaf3;text-align:center;padding:22px;cursor:pointer;color:#7a420c;font-weight:600}
 .drop small{display:block;font-weight:400;color:var(--m);margin-top:2px}
+.himg{width:100%;max-height:230px;object-fit:cover;border-radius:12px;display:block;background:#eee}
+.prrow{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-bottom:10px}.prrow input{margin:0}
 .ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-top:16px}
 .pi{border:1px solid var(--l);border-radius:12px;padding:8px;background:#fff}
 .pi img{width:100%;height:120px;object-fit:cover;border-radius:8px;display:block;background:#eee}
@@ -90,7 +92,7 @@ textarea{min-height:96px;resize:vertical}
   <div class="lbox">
     <span class="logo">Panel Admin</span>
     <h1>Masuk untuk mengelola website</h1>
-    <div class="f"><label for="repo">Login User</label><input type="text" id="repo"></div>
+    <div class="f"><label for="usr">Login User</label><input type="text" id="usr" autocomplete="username" spellcheck="false"></div>
     <div class="f"><label for="tok">Password</label><input type="password" id="tok" autocomplete="off" spellcheck="false"></div>
     <label style="display:flex;gap:8px;align-items:center;font-size:.9rem;margin-bottom:14px"><input type="checkbox" id="rem"> Ingat di browser ini (jangan dicentang di komputer umum)</label>
     <button class="btn" id="lbtn" style="width:100%" onclick="connect()">Masuk</button>
@@ -114,6 +116,7 @@ textarea{min-height:96px;resize:vertical}
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
+var REPO="Farid252/villa-otwyuks",ADMIN_USER="admin";
 var S={tok:"",repo:"",villas:[],set:{},shaV:"",shaS:"",view:"villas",ed:null,idx:-1,prev:{},dirty:false};
 var SUG=["Wi-Fi","AC di semua kamar","Kolam renang","Dapur lengkap","Parkir luas","Area BBQ","Water heater","TV dan Netflix"];
 var GROUPS=[
@@ -122,7 +125,8 @@ var GROUPS=[
   {k:"tagline",l:"Tagline",h:"Kalimat pendek di bawah logo.",w:"Di bawah logo"}]},
  {t:"Halaman depan",d:"Banner besar berlatar gelap yang pertama kali dilihat pengunjung.",f:[
   {k:"hero_title",l:"Judul besar",h:"Kalimat utama untuk menarik pengunjung. Usahakan singkat, di bawah 60 karakter.",w:"Banner paling atas"},
-  {k:"hero_text",l:"Teks pendukung",h:"Penjelasan 1-2 kalimat di bawah judul besar.",w:"Di bawah judul besar",long:1}]},
+  {k:"hero_text",l:"Teks pendukung",h:"Penjelasan 1-2 kalimat di bawah judul besar.",w:"Di bawah judul besar",long:1},
+  {k:"hero_image",l:"Foto latar banner",h:"Foto besar di belakang judul. Pilih foto landscape (melebar) yang terang dan jelas, idealnya lebar 1920 piksel. Foto otomatis dikecilkan agar website cepat. Jika kosong, banner memakai warna coklat bawaan.",w:"Banner paling atas",img:1}]},
  {t:"Bagian Tentang",d:"Perkenalan singkat usaha di bagian bawah halaman.",f:[
   {k:"about_title",l:"Judul bagian Tentang",h:"Judul perkenalan, misalnya keunggulan usaha Anda.",w:"Bagian Tentang"},
   {k:"about_text",l:"Isi perkenalan",h:"Ceritakan usaha Anda dalam 2-3 kalimat.",w:"Bagian Tentang",long:1},
@@ -140,18 +144,19 @@ function dec(s){return decodeURIComponent(escape(atob(s.replace(/\s/g,""))))}
 function rp(n){return "Rp "+Number(n||0).toLocaleString("id-ID")}
 function toast(m,bad){var t=$("#toast");t.textContent=m;t.className="show"+(bad?" bad":"");clearTimeout(toast.t);toast.t=setTimeout(function(){t.className=""},4500)}
 function api(path,o){o=o||{};return fetch("https://api.github.com/repos/"+S.repo+path,{method:o.method||"GET",cache:"no-store",headers:{"Authorization":"Bearer "+S.tok,"Accept":"application/vnd.github+json","Content-Type":"application/json"},body:o.body?JSON.stringify(o.body):undefined}).then(function(r){return r.json().then(function(j){if(!r.ok){var e=new Error(j.message||("Error "+r.status));e.status=r.status;throw e}return j})})}
-function errMsg(e){if(e.status===401)return"Token ditolak atau sudah kedaluwarsa. Buat token baru.";if(e.status===404)return"Repository atau file data tidak ditemukan. Cek nama repository dan izin token (Contents: Read and write).";if(e.status===409)return"Data di GitHub sudah berubah (mungkin diedit dari tempat lain). Muat ulang halaman lalu coba lagi.";if(e.status===403)return"Izin token kurang. Pastikan Contents: Read and write.";return e.message||"Terjadi kesalahan."}
+function errMsg(e){if(e.status===401)return"Login User atau Password salah, atau password sudah kedaluwarsa.";if(e.status===404)return"Repository atau file data tidak ditemukan. Cek nama repository dan izin token (Contents: Read and write).";if(e.status===409)return"Data di GitHub sudah berubah (mungkin diedit dari tempat lain). Muat ulang halaman lalu coba lagi.";if(e.status===403)return"Izin token kurang. Pastikan Contents: Read and write.";return e.message||"Terjadi kesalahan."}
 function load(){return Promise.all([api("/contents/data/villas.json"),api("/contents/data/settings.json")]).then(function(a){S.shaV=a[0].sha;S.shaS=a[1].sha;S.villas=JSON.parse(dec(a[0].content)).villas||[];S.set=JSON.parse(dec(a[1].content))})}
 function put(path,text,sha,msg){var b={message:msg,content:enc(text)};if(sha)b.sha=sha;return api("/contents/"+path,{method:"PUT",body:b}).then(function(r){return r.content.sha})}
 
 /* login */
 function guess(){var h=location.hostname.split("."),p=location.pathname.split("/").filter(Boolean);if(/github\.io$/.test(location.hostname)){if(p[0]&&p[0]!=="admin")return h[0]+"/"+p[0];return h[0]+"/"+h[0]+".github.io"}return""}
 function connect(auto){
-  var repo=$("#repo").value.trim(),tok=$("#tok").value.trim();
-  if(!/^[^\/\s]+\/[^\/\s]+$/.test(repo)||!tok){$("#lerr").textContent="Isi Login User dan Password.";return}
-  S.repo=repo;S.tok=tok;$("#lbtn").disabled=true;$("#lbtn").textContent="Menghubungkan…";$("#lerr").textContent="";
+  var usr=$("#usr").value.trim(),tok=$("#tok").value.trim();
+  if(!usr||!tok){$("#lerr").textContent="Isi Login User dan Password.";return}
+  if(usr.toLowerCase()!==ADMIN_USER.toLowerCase()){$("#lerr").textContent="Login User atau Password salah.";return}
+  S.repo=REPO;S.tok=tok;$("#lbtn").disabled=true;$("#lbtn").textContent="Menghubungkan…";$("#lerr").textContent="";
   load().then(function(){
-    if(!auto){var st=$("#rem").checked?localStorage:sessionStorage;try{st.setItem("vtok",tok);st.setItem("vrepo",repo)}catch(e){}}
+    if(!auto){var st=$("#rem").checked?localStorage:sessionStorage;try{st.setItem("vtok",tok);st.setItem("vusr",usr)}catch(e){}}
     $("#login").classList.add("hide");$("#app").classList.remove("hide");go("villas",1)
   }).catch(function(e){$("#lerr").textContent=errMsg(e);$("#lbtn").disabled=false;$("#lbtn").textContent="Masuk"})
 }
@@ -167,7 +172,7 @@ function render(){
   $("#sbn").textContent=S.set.brand||"Panel Admin";
   var m=$("#main");
   m.innerHTML=S.view==="villas"?vVillas():S.view==="edit"?vEdit():S.view==="settings"?vSettings():vHelp();
-  if(S.view==="edit"){chips();photos()}
+  if(S.view==="edit"){chips();photos();priceRows()}
   window.scrollTo(0,0)
 }
 function ch(){S.dirty=true}
@@ -179,12 +184,14 @@ function vVillas(){
   h+='<div class="grid">';
   S.villas.forEach(function(v,i){
     var p=(v.photos||[]).filter(function(x){return x.image}),c=p[0]?'style="background-image:url(\''+esc(S.prev[p[0].image]||("../"+p[0].image))+'\')"':"";
-    h+='<div class="vc"><div class="cov" '+c+'>'+(p[0]?"":"Belum ada foto")+'</div><div class="vb"><span class="bd">'+esc(v.category)+'</span><h3>'+esc(v.name)+'</h3><div class="pr">'+rp(v.price)+' <small style="font-weight:400;color:var(--m)">/ malam</small></div><p class="mt">'+p.length+' foto · '+(+v.guests||0)+' tamu · '+(+v.rooms||0)+' kamar</p></div><div class="va"><button class="btn sm" onclick="editV('+i+')">Ubah</button><button class="btn sm danger" onclick="delV('+i+')">Hapus</button></div></div>'
+    var pl=vp(v),mn=pl.length?Math.min.apply(null,pl.map(function(x){return+x.price})):0,pj=pl.length>1?'<p class="mt">'+pl.map(function(x){return esc(x.label)+": "+rp(x.price)}).join(" · ")+'</p>':"";
+    h+='<div class="vc"><div class="cov" '+c+'>'+(p[0]?"":"Belum ada foto")+'</div><div class="vb"><span class="bd">'+esc(v.category)+'</span><h3>'+esc(v.name)+'</h3><div class="pr">'+(pl.length>1?"Mulai ":"")+rp(mn)+' <small style="font-weight:400;color:var(--m)">/ malam</small></div>'+pj+'<p class="mt">'+p.length+' foto · '+(+v.guests||0)+' tamu · '+(+v.rooms||0)+' kamar</p></div><div class="va"><button class="btn sm" onclick="editV('+i+')">Ubah</button><button class="btn sm danger" onclick="delV('+i+')">Hapus</button></div></div>'
   });
   return h+'</div>'
 }
-function newV(){S.idx=-1;S.ed={name:"",category:"",location:"",guests:2,rooms:1,price:0,description:"",facilities:[],photos:[]};S.dirty=false;S.view="edit";render()}
-function editV(i){S.idx=i;S.ed=JSON.parse(JSON.stringify(S.villas[i]));S.ed.facilities=S.ed.facilities||[];S.ed.photos=S.ed.photos||[];S.dirty=false;S.view="edit";render()}
+function vp(v){var a=(v.prices||[]).filter(function(x){return+x.price>0});return a.length?a:(+v.price?[{label:"",price:v.price}]:[])}
+function newV(){S.idx=-1;S.ed={name:"",category:"",location:"",guests:2,rooms:1,prices:[{label:"Weekday",price:0},{label:"Weekend",price:0}],description:"",facilities:[],photos:[]};S.dirty=false;S.view="edit";render()}
+function editV(i){S.idx=i;S.ed=JSON.parse(JSON.stringify(S.villas[i]));S.ed.facilities=S.ed.facilities||[];S.ed.photos=S.ed.photos||[];S.ed.prices=S.ed.prices&&S.ed.prices.length?S.ed.prices:(+S.ed.price?[{label:"Per malam",price:+S.ed.price}]:[]);S.dirty=false;S.view="edit";render()}
 function delV(i){
   if(!confirm('Hapus villa "'+S.villas[i].name+'" dari website? Tindakan ini tidak bisa dibatalkan dari panel.'))return;
   var old=S.villas.slice();S.villas.splice(i,1);
@@ -200,18 +207,25 @@ function vEdit(){
   '<div class="f"><label for="n">Nama villa</label><p class="h">Tampil sebagai judul kartu villa.</p><input type="text" id="n" value="'+esc(e.name)+'" oninput="S.ed.name=this.value;ch()"></div>'+
   '<div class="row"><div class="f"><label for="c">Kategori</label><p class="h">Menjadi tombol filter di website. Pilih yang ada atau ketik kategori baru.</p><input type="text" id="c" list="cl" value="'+esc(e.category)+'" oninput="S.ed.category=this.value;ch()"><datalist id="cl">'+cats.map(function(c){return'<option value="'+esc(c)+'">'}).join("")+'</datalist></div>'+
   '<div class="f"><label for="l">Lokasi</label><p class="h">Area atau nama daerah villa.</p><input type="text" id="l" value="'+esc(e.location)+'" oninput="S.ed.location=this.value;ch()"></div></div></div>'+
-  '<div class="card"><h2>2. Kapasitas dan harga</h2><p class="d">Informasi yang dilihat pengunjung sebelum memesan.</p><div class="row">'+
+  '<div class="card"><h2>2. Kapasitas</h2><p class="d">Jumlah tamu dan kamar yang dilihat pengunjung sebelum memesan.</p><div class="row">'+
   '<div class="f"><label for="g">Kapasitas tamu</label><p class="h">Jumlah maksimal tamu.</p><input type="number" id="g" min="0" value="'+(+e.guests||0)+'" oninput="S.ed.guests=+this.value;ch()"></div>'+
   '<div class="f"><label for="k">Jumlah kamar</label><p class="h">Kamar tidur yang tersedia.</p><input type="number" id="k" min="0" value="'+(+e.rooms||0)+'" oninput="S.ed.rooms=+this.value;ch()"></div>'+
-  '<div class="f"><label for="p">Harga per malam (Rp)</label><p class="h">Angka saja, tanpa titik. Contoh: 1800000.</p><input type="number" id="p" min="0" value="'+(+e.price||0)+'" oninput="S.ed.price=+this.value;ch()"></div></div></div>'+
-  '<div class="card"><h2>3. Deskripsi</h2><p class="d">Penjelasan singkat tentang villa. Tampil di jendela detail.</p><textarea id="ds" oninput="S.ed.description=this.value;ch()">'+esc(e.description)+'</textarea></div>'+
-  '<div class="card"><h2>4. Fasilitas</h2><p class="d">Ketik satu fasilitas lalu tekan Enter, atau klik saran di bawah. Tampil sebagai daftar di jendela detail.</p>'+
+  '</div></div>'+
+  '<div class="card"><h2>3. Harga per malam</h2><p class="d">Buat kategori harga sesuai kebutuhan, misalnya Weekday dan Weekend. Hari berlakunya Anda tulis sendiri di nama kategori, contoh: Weekend (Jumat-Minggu). Semua kategori tampil di kartu dan jendela detail villa. Isi harga dengan angka saja, tanpa titik.</p><div id="prs"></div><div class="sug"><button onclick="addPr(\'Weekday\')">+ Weekday</button><button onclick="addPr(\'Weekend\')">+ Weekend</button><button onclick="addPr(\'Libur nasional\')">+ Libur nasional</button><button onclick="addPr(\'\')">+ Kategori lain</button></div></div>'+
+  '<div class="card"><h2>4. Deskripsi</h2><p class="d">Penjelasan singkat tentang villa. Tampil di jendela detail.</p><textarea id="ds" oninput="S.ed.description=this.value;ch()">'+esc(e.description)+'</textarea></div>'+
+  '<div class="card"><h2>5. Fasilitas</h2><p class="d">Ketik satu fasilitas lalu tekan Enter, atau klik saran di bawah. Tampil sebagai daftar di jendela detail.</p>'+
   '<div class="inl"><input type="text" id="fi" placeholder="Contoh: Kolam renang pribadi" onkeydown="if(event.key===\'Enter\'){event.preventDefault();addF()}"><button class="btn" onclick="addF()">Tambah</button></div>'+
   '<div class="sug">'+SUG.map(function(s,i){return'<button onclick="addF(SUG['+i+'])">+ '+esc(s)+'</button>'}).join("")+'</div><div class="chips" id="chips"></div></div>'+
-  '<div class="card"><h2>5. Foto villa</h2><p class="d">Foto pertama menjadi foto sampul di kartu villa. Foto otomatis dikecilkan (maksimal 1600 piksel) supaya website tetap cepat.</p>'+
+  '<div class="card"><h2>6. Foto villa</h2><p class="d">Foto pertama menjadi foto sampul di kartu villa. Foto otomatis dikecilkan (maksimal 1600 piksel) supaya website tetap cepat.</p>'+
   '<label class="drop">+ Klik untuk menambah foto<small>Boleh pilih beberapa foto sekaligus (JPG, PNG, WebP)</small><input type="file" accept="image/*" multiple hidden onchange="upl(this.files);this.value=\'\'"></label><div class="ph" id="ph"></div></div>'+
   '<div class="bar"><span class="n">Perubahan baru tampil di website sekitar 1 menit setelah disimpan.</span><button class="btn ghost" onclick="go(\'villas\')">Batal</button><button class="btn" id="sv" onclick="saveV()">Simpan villa</button></div>'
 }
+function priceRows(){
+  var c=$("#prs");if(!c)return;
+  c.innerHTML=S.ed.prices.map(function(x,i){return'<div class="prrow"><input type="text" list="pl" aria-label="Nama kategori harga" placeholder="Nama kategori" value="'+esc(x.label)+'" oninput="S.ed.prices['+i+'].label=this.value;ch()"><input type="number" min="0" aria-label="Harga" placeholder="Harga (Rp)" value="'+(+x.price||"")+'" oninput="S.ed.prices['+i+'].price=+this.value;ch()"><button class="btn danger sm" onclick="delPr('+i+')">Hapus</button></div>'}).join("")+'<datalist id="pl"><option value="Weekday"><option value="Weekend"><option value="Libur nasional"><option value="Musim liburan"><option value="Long weekend"></datalist>'
+}
+function addPr(l){S.ed.prices.push({label:l||"",price:0});ch();priceRows()}
+function delPr(i){S.ed.prices.splice(i,1);ch();priceRows()}
 function chips(){
   var c=$("#chips");if(!c)return;
   c.innerHTML=S.ed.facilities.length?S.ed.facilities.map(function(f,i){return'<span class="chip">'+esc(f)+'<button aria-label="Hapus '+esc(f)+'" onclick="delF('+i+')">×</button></span>'}).join(""):'<span style="color:var(--m);font-size:.9rem">Belum ada fasilitas. Jika dikosongkan, website memakai fasilitas bawaan kategori.</span>'
@@ -226,7 +240,7 @@ function photos(){
 }
 function cover(i){var p=S.ed.photos.splice(i,1)[0];S.ed.photos.unshift(p);ch();photos()}
 function delP(i){S.ed.photos.splice(i,1);ch();photos()}
-function shrink(f){return new Promise(function(res,rej){var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var r=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.85))};im.onerror=function(){rej(new Error(f.name+" bukan gambar yang valid"))};im.src=u})}
+function shrink(f,mx){return new Promise(function(res,rej){var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var r=Math.min(1,(mx||1600)/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.85))};im.onerror=function(){rej(new Error(f.name+" bukan gambar yang valid"))};im.src=u})}
 function upl(files){
   var list=Array.prototype.slice.call(files),n=0,slug=(S.ed.name||"villa").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"villa";
   (function next(){
@@ -241,7 +255,7 @@ function upl(files){
 function saveV(){
   var e=S.ed;
   if(!e.name.trim()||!e.category.trim()){toast("Nama dan kategori wajib diisi.",1);return}
-  var old=S.villas.slice(),copy=JSON.parse(JSON.stringify(e));copy.name=copy.name.trim();copy.category=copy.category.trim();
+  var old=S.villas.slice(),copy=JSON.parse(JSON.stringify(e));copy.name=copy.name.trim();copy.category=copy.category.trim();copy.prices=(copy.prices||[]).map(function(x){return{label:String(x.label||"").trim(),price:+x.price||0}}).filter(function(x){return x.label&&x.price>0});copy.price=copy.prices.length?Math.min.apply(null,copy.prices.map(function(x){return x.price})):0;
   if(S.idx<0){S.villas.push(copy);S.idx=S.villas.length-1}else S.villas[S.idx]=copy;
   var b=$("#sv");b.disabled=true;b.textContent="Menyimpan…";
   saveVillas().then(function(){S.dirty=false;toast("Tersimpan. Perubahan tampil di website sekitar 1 menit.");S.view="villas";render()}).catch(function(x){S.villas=old;b.disabled=false;b.textContent="Simpan villa";toast(errMsg(x),1)})
@@ -253,12 +267,27 @@ function vSettings(){
   GROUPS.forEach(function(g){
     h+='<div class="card"><h2>'+esc(g.t)+'</h2><p class="d">'+esc(g.d)+'</p>';
     g.f.forEach(function(f){
+      if(f.img){h+=imgField(f);return}
       h+='<div class="f"><label for="s_'+f.k+'">'+esc(f.l)+'<span class="w">'+esc(f.w)+'</span></label><p class="h">'+esc(f.h)+'</p>'+
       (f.long?'<textarea id="s_'+f.k+'" oninput="S.set.'+f.k+'=this.value;ch()">'+esc(S.set[f.k])+'</textarea>':'<input type="text" id="s_'+f.k+'" value="'+esc(S.set[f.k])+'" oninput="S.set.'+f.k+'=this.value;ch()">')+'</div>'
     });
     h+='</div>'
   });
   return h+'<div class="bar"><span class="n">Perubahan baru tampil di website sekitar 1 menit setelah disimpan.</span><button class="btn" id="ss" onclick="saveS()">Simpan pengaturan</button></div>'
+}
+function imgField(f){
+  var v=S.set[f.k]||"";
+  return '<div class="f"><label>'+esc(f.l)+'<span class="w">'+esc(f.w)+'</span></label><p class="h">'+esc(f.h)+'</p>'+
+  (v?'<img class="himg" alt="" src="'+esc(S.prev[v]||("../"+v))+'">':'<div class="empty" style="padding:22px">Belum ada foto. Banner memakai warna coklat bawaan.</div>')+
+  '<div class="pb" style="margin-top:10px"><label class="btn ghost sm" style="cursor:pointer">'+(v?"Ganti foto":"Pilih foto")+'<input type="file" accept="image/*" hidden onchange="upHero(this.files[0]);this.value=\'\'"></label>'+(v?'<button class="btn danger sm" onclick="S.set.'+f.k+'=\'\';ch();refSet()">Hapus foto</button>':'')+'</div></div>'
+}
+function refSet(){$("#main").innerHTML=vSettings()}
+function upHero(f){
+  if(!f)return;toast("Mengunggah foto banner…");
+  shrink(f,1920).then(function(d){
+    var name="foto/banner-"+Date.now().toString(36)+".jpg";
+    return api("/contents/"+name,{method:"PUT",body:{message:"Tambah foto banner via panel admin",content:d.split(",")[1]}}).then(function(){S.prev[name]=d;S.set.hero_image=name;ch();refSet();toast("Foto diunggah. Klik Simpan pengaturan untuk menayangkannya.")})
+  }).catch(function(e){toast(errMsg(e),1)})
 }
 function saveS(){
   S.set.wa=String(S.set.wa||"").replace(/\D/g,"");
@@ -277,9 +306,8 @@ function vHelp(){
 
 /* mulai */
 (function(){
-  $("#repo").value=guess();
-  var t="",r="";try{t=localStorage.getItem("vtok")||sessionStorage.getItem("vtok")||"";r=localStorage.getItem("vrepo")||sessionStorage.getItem("vrepo")||""}catch(e){}
-  if(t){$("#tok").value=t;if(r)$("#repo").value=r;connect(true)}
+  var t="",u="";try{t=localStorage.getItem("vtok")||sessionStorage.getItem("vtok")||"";u=localStorage.getItem("vusr")||sessionStorage.getItem("vusr")||""}catch(e){}
+  if(t&&u){$("#usr").value=u;$("#tok").value=t;connect(true)}
 })();
 </script>
 </body>

@@ -1,21 +1,3 @@
 {
-  "villas": [
-    {
-      "name": "Villa Senja",
-      "category": "Romantis",
-      "location": "Tebing Barat",
-      "guests": 2,
-      "rooms": 1,
-      "price": 2100000,
-      "description": "",
-      "facilities": [
-        "Kamar dengan bathtub",
-        "Balkon pemandangan senja",
-        "Sarapan untuk berdua",
-        "Wi-Fi",
-        "AC"
-      ],
-      "photos": []
-    }
-  ]
+  "villas": []
 }

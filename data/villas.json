@@ -6,7 +6,7 @@
       "location": "",
       "guests": 30,
       "rooms": 3,
-      "price": 0,
+      "price": 1800000,
       "description": "",
       "facilities": [
         "Wi-Fi",
@@ -37,6 +37,16 @@
         {
           "image": "foto/villa-nirwana-2-mwt3cyc50.jpg",
           "caption": "Kamar Mandi"
+        }
+      ],
+      "prices": [
+        {
+          "label": "Weekday",
+          "price": 1800000
+        },
+        {
+          "label": "Weekend",
+          "price": 3800000
         }
       ]
     }

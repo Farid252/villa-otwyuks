@@ -1,24 +1,6 @@
 {
   "villas": [
     {
-      "name": "Villa Tepi Laut",
-      "category": "Pantai",
-      "location": "Pantai Selatan",
-      "guests": 6,
-      "rooms": 3,
-      "price": 1800000,
-      "description": "",
-      "facilities": [
-        "Akses langsung ke pantai",
-        "AC di semua kamar",
-        "Wi-Fi cepat",
-        "Dapur lengkap",
-        "Area BBQ",
-        "Parkir 3 mobil"
-      ],
-      "photos": []
-    },
-    {
       "name": "Villa Karang Biru",
       "category": "Pantai",
       "location": "Pantai Utara",

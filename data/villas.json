@@ -1,24 +1,6 @@
 {
   "villas": [
     {
-      "name": "Villa Kolam Privat",
-      "category": "Kolam Pribadi",
-      "location": "Area Resort",
-      "guests": 8,
-      "rooms": 4,
-      "price": 3200000,
-      "description": "",
-      "facilities": [
-        "Kolam renang pribadi",
-        "Gazebo tepi kolam",
-        "AC di semua kamar",
-        "Wi-Fi cepat",
-        "Area BBQ",
-        "Dapur lengkap"
-      ],
-      "photos": []
-    },
-    {
       "name": "Villa Senja",
       "category": "Romantis",
       "location": "Tebing Barat",

@@ -1,24 +1,6 @@
 {
   "villas": [
     {
-      "name": "Villa Keluarga Asri",
-      "category": "Keluarga",
-      "location": "Dekat Wisata",
-      "guests": 12,
-      "rooms": 5,
-      "price": 2400000,
-      "description": "",
-      "facilities": [
-        "Kamar luas untuk keluarga",
-        "AC di semua kamar",
-        "Taman bermain anak",
-        "Dapur lengkap",
-        "Ruang karaoke",
-        "Parkir 4 mobil"
-      ],
-      "photos": []
-    },
-    {
       "name": "Villa Taman Ceria",
       "category": "Keluarga",
       "location": "Pusat Kota",

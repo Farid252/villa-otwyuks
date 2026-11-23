@@ -15,7 +15,7 @@ button,input,textarea{font:inherit}
 /* login */
 #login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(1000px 500px at 20% 0,#8a4a1a,transparent),linear-gradient(135deg,#2a170c,#150b05)}
 .lbox{background:#fff;border-radius:20px;padding:32px;width:min(440px,100%);box-shadow:0 30px 60px rgba(0,0,0,.4)}
-.lbox h1{margin:0 0 4px;font-size:1.5rem}.lbox p{margin:0 0 18px;color:var(--m);font-size:.93rem}
+.lbox h1{margin:0 0 20px;font-size:1.5rem}.lbox p{margin:0 0 18px;color:var(--m);font-size:.93rem}
 .logo{display:inline-block;background:var(--o);color:#fff;font-weight:700;border-radius:10px;padding:4px 12px;margin-bottom:14px}
 /* layout */
 #app{display:flex;min-height:100vh}
@@ -51,7 +51,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible,
 .f label{display:block;font-weight:600;margin-bottom:2px}
 .f .h{color:var(--m);font-size:.86rem;margin:0 0 6px}
 .w{display:inline-block;background:#eef4ff;color:#2552a6;border-radius:6px;padding:1px 8px;font-size:.74rem;font-weight:600;margin-left:6px;vertical-align:middle}
-input[type=text],input[type=number],textarea{width:100%;padding:10px 12px;border:1px solid #d4cabd;border-radius:10px;background:#fff}
+input[type=text],input[type=number],input[type=password],textarea{width:100%;padding:10px 12px;border:1px solid #d4cabd;border-radius:10px;background:#fff}
 textarea{min-height:96px;resize:vertical}
 /* chips */
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
@@ -90,9 +90,8 @@ textarea{min-height:96px;resize:vertical}
   <div class="lbox">
     <span class="logo">Panel Admin</span>
     <h1>Masuk untuk mengelola website</h1>
-    <p>Hubungkan panel dengan repository GitHub website Anda memakai token akses.</p>
-    <div class="f"><label for="repo">Repository</label><p class="h">Format: nama-akun/nama-repository</p><input type="text" id="repo" placeholder="Farid252/villa-otwyuks"></div>
-    <div class="f"><label for="tok">Token akses GitHub</label><p class="h">Token yang diawali github_pat_ (izin Contents: Read and write).</p><input type="text" id="tok" autocomplete="off" spellcheck="false" placeholder="github_pat_..."></div>
+    <div class="f"><label for="repo">Login User</label><input type="text" id="repo"></div>
+    <div class="f"><label for="tok">Password</label><input type="password" id="tok" autocomplete="off" spellcheck="false"></div>
     <label style="display:flex;gap:8px;align-items:center;font-size:.9rem;margin-bottom:14px"><input type="checkbox" id="rem"> Ingat di browser ini (jangan dicentang di komputer umum)</label>
     <button class="btn" id="lbtn" style="width:100%" onclick="connect()">Masuk</button>
     <p class="err" id="lerr" role="alert"></p>
@@ -149,7 +148,7 @@ function put(path,text,sha,msg){var b={message:msg,content:enc(text)};if(sha)b.s
 function guess(){var h=location.hostname.split("."),p=location.pathname.split("/").filter(Boolean);if(/github\.io$/.test(location.hostname)){if(p[0]&&p[0]!=="admin")return h[0]+"/"+p[0];return h[0]+"/"+h[0]+".github.io"}return""}
 function connect(auto){
   var repo=$("#repo").value.trim(),tok=$("#tok").value.trim();
-  if(!/^[^\/\s]+\/[^\/\s]+$/.test(repo)||!tok){$("#lerr").textContent="Isi repository (contoh: Farid252/villa-otwyuks) dan token.";return}
+  if(!/^[^\/\s]+\/[^\/\s]+$/.test(repo)||!tok){$("#lerr").textContent="Isi Login User dan Password.";return}
   S.repo=repo;S.tok=tok;$("#lbtn").disabled=true;$("#lbtn").textContent="Menghubungkan…";$("#lerr").textContent="";
   load().then(function(){
     if(!auto){var st=$("#rem").checked?localStorage:sessionStorage;try{st.setItem("vtok",tok);st.setItem("vrepo",repo)}catch(e){}}

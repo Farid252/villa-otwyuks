@@ -3,7 +3,7 @@
     {
       "name": "Villa Nirwana 2",
       "category": "keluarga",
-      "location": "",
+      "location": "JL raya Puncak ",
       "guests": 30,
       "rooms": 3,
       "price": 1800000,
@@ -56,7 +56,8 @@
           "label": "Weekend",
           "price": 3800000
         }
-      ]
+      ],
+      "booked": []
     }
   ]
 }

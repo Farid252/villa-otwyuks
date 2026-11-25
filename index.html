@@ -274,14 +274,15 @@ var IC={
  bed:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v5"/></svg>'
 };
 function mapsUrl(v){
- if(v.mp&&/^https?:\/\//i.test(v.mp))return v.mp;
- if(v.l)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.l+", Puncak, Jawa Barat, Indonesia")+"&hl=id";
+ var t=v.mp||v.l||"";
+ if(/^https?:\/\//i.test(t))return t;
+ if(t)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(t+", Puncak, Jawa Barat, Indonesia")+"&hl=id";
  return "";
 }
+function locLabel(v){var t=v.mp||v.l||"";if(!t)return"";return /^https?:\/\//i.test(t)?"Lihat lokasi di peta":t}
 function metaHtml(v){
  var p=[],mu=mapsUrl(v);
- if(mu){var lt=v.l||"Lihat lokasi";p.push('<a class="loc" href="'+mu+'" target="_blank" rel="noopener" title="Buka di Google Maps" onclick="event.stopPropagation()">'+IC.pin+esc(lt)+'</a>')}
- else if(v.l){p.push('<span>'+IC.pin+esc(v.l)+'</span>')}
+ if(mu){p.push('<a class="loc" href="'+mu+'" target="_blank" rel="noopener" title="Buka di Google Maps" onclick="event.stopPropagation()">'+IC.pin+esc(locLabel(v)||"Lihat lokasi")+'</a>')}
  p.push('<span>'+IC.users+v.g+' tamu</span>');
  p.push('<span>'+IC.bed+v.k+' kamar</span>');
  return p.join("");
@@ -336,7 +337,7 @@ function openV(v){
   cp=pics(v);var th=document.getElementById("dth");th.innerHTML="";
   cp.forEach(function(p,i){var b=document.createElement("button");b.className="th";b.setAttribute("aria-label","Foto "+p.cap);b.style.background=p.bg;b.onclick=function(){showPic(i)};th.appendChild(b)});
   document.getElementById("dt").textContent=v.n;
-  var mu=mapsUrl(v),locHtml=mu?'<a href="'+mu+'" target="_blank" rel="noopener" title="Buka di Google Maps">'+esc(v.l||"Lihat lokasi di peta")+"</a>":esc(v.l||"");
+  var mu=mapsUrl(v),locHtml=mu?'<a href="'+mu+'" target="_blank" rel="noopener" title="Buka di Google Maps">'+esc(locLabel(v)||"Lihat lokasi di peta")+"</a>":"";
   document.getElementById("dmeta").innerHTML=[esc(v.c),locHtml,v.g+" tamu",v.k+" kamar"].filter(Boolean).join(' <span aria-hidden="true">·</span> ');
   document.getElementById("ddesc").textContent=v.desc||"";
   var f=document.getElementById("dfac");f.innerHTML="";

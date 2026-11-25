@@ -217,7 +217,7 @@ function vVillas(){
   return h+'</div>'
 }
 function vp(v){var a=(v.prices||[]).filter(function(x){return+x.price>0});return a.length?a:(+v.price?[{label:"",price:v.price}]:[])}
-function newV(){S.cy=null;S.idx=-1;S.ed={name:"",category:"",location:"",maps:"",guests:2,rooms:1,prices:[{label:"Weekday",price:0},{label:"Weekend",price:0}],description:"",facilities:[],photos:[]};S.dirty=false;S.view="edit";render()}
+function newV(){S.cy=null;S.idx=-1;S.ed={name:"",category:"",location:"",guests:2,rooms:1,prices:[{label:"Weekday",price:0},{label:"Weekend",price:0}],description:"",facilities:[],photos:[]};S.dirty=false;S.view="edit";render()}
 function editV(i){S.cy=null;S.idx=i;S.ed=JSON.parse(JSON.stringify(S.villas[i]));S.ed.facilities=S.ed.facilities||[];S.ed.photos=S.ed.photos||[];S.ed.prices=S.ed.prices&&S.ed.prices.length?S.ed.prices:(+S.ed.price?[{label:"Per malam",price:+S.ed.price}]:[]);S.dirty=false;S.view="edit";render()}
 function delV(i){
   if(!confirm('Hapus villa "'+S.villas[i].name+'" dari website? Tindakan ini tidak bisa dibatalkan dari panel.'))return;
@@ -230,11 +230,10 @@ function saveVillas(){return put("data/villas.json",JSON.stringify({villas:S.vil
 function vEdit(){
   var e=S.ed,cats=[];S.villas.forEach(function(v){if(v.category&&cats.indexOf(v.category)<0)cats.push(v.category)});
   return '<div class="top"><div><h1>'+(S.idx<0?"Tambah villa":"Ubah villa")+'</h1><p class="sub">Isi data villa. Semua yang diisi di sini tampil di kartu villa dan jendela detail pada website.</p></div><button class="btn ghost" onclick="go(\'villas\')">← Kembali</button></div>'+
-  '<div class="card"><h2>1. Informasi dasar</h2><p class="d">Nama, kategori, lokasi, dan tautan Google Maps villa.</p>'+
+  '<div class="card"><h2>1. Informasi dasar</h2><p class="d">Nama, kategori, dan lokasi villa.</p>'+
   '<div class="f"><label for="n">Nama villa</label><p class="h">Tampil sebagai judul kartu villa.</p><input type="text" id="n" value="'+esc(e.name)+'" oninput="S.ed.name=this.value;ch()"></div>'+
   '<div class="row"><div class="f"><label for="c">Kategori</label><p class="h">Menjadi tombol filter di website. Pilih yang ada atau ketik kategori baru.</p><input type="text" id="c" list="cl" value="'+esc(e.category)+'" oninput="S.ed.category=this.value;ch()"><datalist id="cl">'+cats.map(function(c){return'<option value="'+esc(c)+'">'}).join("")+'</datalist></div>'+
-  '<div class="f"><label for="l">Lokasi</label><p class="h">Alamat atau nama daerah, mis. Jl. Raya Puncak No. 123. Tampil sebagai tombol lokasi yang bisa diklik pengunjung.</p><input type="text" id="l" value="'+esc(e.location)+'" oninput="S.ed.location=this.value;ch()"></div>'+
-  '<div class="f"><label for="m">Link Google Maps <span style="color:var(--m);font-weight:400">(opsional)</span></label><p class="h">Tempel tautan lokasi dari Google Maps (Bagikan → Salin tautan). Kalau diisi, tombol lokasi langsung membuka titik peta itu. Kalau kosong, peta mencari otomatis berdasarkan alamat di kolom Lokasi.</p><input type="text" id="m" placeholder="https://maps.google.com/?q=..." value="'+esc(e.maps||"")+'" oninput="S.ed.maps=this.value;ch()"></div></div></div>'+
+  '<div class="f"><label for="l">Lokasi <span style="color:var(--m);font-weight:400">(opsional, alamat atau tautan Maps)</span></label><p class="h">Ketik alamat, mis. Jl. Raya Puncak No. 123, supaya peta mencari otomatis; atau tempel tautan Google Maps (Bagikan → Salin tautan) untuk titik yang persis. Pengunjung tinggal klik tombol lokasi di website.</p><input type="text" id="l" placeholder="Alamat, mis. Jl. Raya Puncak No. 123 — atau tempel tautan maps.google.com" value="'+esc(e.location||e.maps||"")+'" oninput="S.ed.location=this.value;ch()"></div></div></div>'+
   '<div class="card"><h2>2. Kapasitas</h2><p class="d">Jumlah tamu dan kamar yang dilihat pengunjung sebelum memesan.</p><div class="row">'+
   '<div class="f"><label for="g">Kapasitas tamu</label><p class="h">Jumlah maksimal tamu.</p><input type="number" id="g" min="0" value="'+(+e.guests||0)+'" oninput="S.ed.guests=+this.value;ch()"></div>'+
   '<div class="f"><label for="k">Jumlah kamar</label><p class="h">Kamar tidur yang tersedia.</p><input type="number" id="k" min="0" value="'+(+e.rooms||0)+'" oninput="S.ed.rooms=+this.value;ch()"></div>'+
@@ -303,7 +302,7 @@ function calClear(){var p=S.cy+"-"+("0"+(S.cm+1)).slice(-2)+"-";S.ed.booked=(S.e
 function saveV(){
   var e=S.ed;
   if(!e.name.trim()||!e.category.trim()){toast("Nama dan kategori wajib diisi.",1);return}
-  var old=S.villas.slice(),copy=JSON.parse(JSON.stringify(e));copy.name=copy.name.trim();copy.category=copy.category.trim();copy.maps=String(copy.maps||"").trim();if(copy.maps&&!/^https?:\/\//i.test(copy.maps))copy.maps="https://"+copy.maps;copy.prices=(copy.prices||[]).map(function(x){return{label:String(x.label||"").trim(),price:+x.price||0}}).filter(function(x){return x.label&&x.price>0});var _t=todayS();copy.booked=(copy.booked||[]).filter(function(k,i,r){return /^\d{4}-\d{2}-\d{2}$/.test(k)&&k>=_t&&r.indexOf(k)===i}).sort();copy.price=copy.prices.length?Math.min.apply(null,copy.prices.map(function(x){return x.price})):0;
+  var old=S.villas.slice(),copy=JSON.parse(JSON.stringify(e));copy.name=copy.name.trim();copy.category=copy.category.trim();copy.location=String(copy.location||"").trim();if(copy.location&&!/^https?:\/\//i.test(copy.location)&&/^(maps\.|www\.maps|goo\.gl|google\.com)/i.test(copy.location))copy.location="https://"+copy.location;delete copy.maps;copy.prices=(copy.prices||[]).map(function(x){return{label:String(x.label||"").trim(),price:+x.price||0}}).filter(function(x){return x.label&&x.price>0});var _t=todayS();copy.booked=(copy.booked||[]).filter(function(k,i,r){return /^\d{4}-\d{2}-\d{2}$/.test(k)&&k>=_t&&r.indexOf(k)===i}).sort();copy.price=copy.prices.length?Math.min.apply(null,copy.prices.map(function(x){return x.price})):0;
   if(S.idx<0){S.villas.push(copy);S.idx=S.villas.length-1}else S.villas[S.idx]=copy;
   var b=$("#sv");b.disabled=true;b.textContent="Menyimpan…";
   saveVillas().then(function(){S.dirty=false;toast("Tersimpan. Perubahan tampil di website sekitar 1 menit.");S.view="villas";render()}).catch(function(x){S.villas=old;b.disabled=false;b.textContent="Simpan villa";toast(errMsg(x),1)})

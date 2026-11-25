@@ -41,8 +41,7 @@ nav a:hover,nav a:focus-visible{background:var(--sage);color:var(--green-d)}
 /* ===== hero ===== */
 .hero{position:relative;color:#fff;padding:108px 0 120px;background:linear-gradient(160deg,#0b3d2e 0%,#10664a 55%,#0f766e 100%);overflow:hidden}
 .hero::after{content:"";position:absolute;inset:0;background:
-  radial-gradient(620px 320px at 82% 12%,rgba(255,255,255,.12),transparent 60%),
-  radial-gradient(520px 360px at 8% 96%,rgba(201,154,78,.16),transparent 60%);pointer-events:none}
+  linear-gradient(180deg,rgba(0,0,0,.18),transparent 32%,transparent 62%,rgba(0,0,0,.24));pointer-events:none}
 .hero-in{position:relative;z-index:1;max-width:640px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 18px;padding:7px 15px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);font-size:.84rem;font-weight:600;letter-spacing:.04em}
 .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:#8fe0b8}
@@ -349,7 +348,7 @@ Promise.all([loadJSON("data/villas.json"),loadJSON("data/settings.json")]).then(
   if(S.brand)document.title=S.brand+" – "+(S.tagline||"");
   WA=S.wa||"";
   if(S.about_logo){var ph=document.querySelector(".photo");if(ph){var li=document.createElement("img");li.alt=S.brand||"Logo";li.src=encodeURI(S.about_logo);ph.insertBefore(li,ph.firstChild)}}
-  if(S.hero_image){document.querySelector(".hero").style.background="linear-gradient(90deg,rgba(11,61,46,.82),rgba(11,61,46,.38)),url('"+encodeURI(S.hero_image)+"') center/cover no-repeat"}
+  if(S.hero_image){document.querySelector(".hero").style.background="linear-gradient(90deg,rgba(0,0,0,.52) 0%,rgba(0,0,0,.22) 55%,rgba(0,0,0,.06) 100%),linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.30) 100%),url('"+encodeURI(S.hero_image)+"') center/cover no-repeat"}
   document.getElementById("fwa").href="https://wa.me/"+WA;
   document.getElementById("fem").href="mailto:"+(S.email||"");
   var yr=document.getElementById("yr");if(yr)yr.textContent=new Date().getFullYear();

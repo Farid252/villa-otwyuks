@@ -65,6 +65,11 @@ textarea{min-height:96px;resize:vertical}
 .drop{display:block;border:2px dashed #d9b98f;border-radius:var(--r);background:#fffaf3;text-align:center;padding:22px;cursor:pointer;color:#7a420c;font-weight:600}
 .drop small{display:block;font-weight:400;color:var(--m);margin-top:2px}
 .himg{width:100%;max-height:230px;object-fit:cover;border-radius:12px;display:block;background:#eee}
+.calh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;max-width:460px}.calh b{font-size:1.05rem}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:460px}.calg .w{text-align:center;font-size:.78rem;font-weight:600;color:var(--m)}
+.calg button{border:1px solid var(--l);background:#fff;border-radius:10px;padding:10px 0;font:inherit;cursor:pointer;color:var(--t)}
+.calg button:hover{border-color:var(--o)}.calg button.full{background:#fde3e1;border-color:#efb5b0;color:var(--x);font-weight:700}.calg button.past{opacity:.45}
+.calleg{display:flex;gap:16px;flex-wrap:wrap;font-size:.86rem;color:var(--m);margin:12px 0 0}.calleg span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid var(--l);background:#fff}.calleg .f::before{background:#fde3e1;border-color:#efb5b0}
 .prrow{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-bottom:10px}.prrow input{margin:0}
 .ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-top:16px}
 .pi{border:1px solid var(--l);border-radius:12px;padding:8px;background:#fff}
@@ -173,7 +178,7 @@ function render(){
   $("#sbn").textContent=S.set.brand||"Panel Admin";
   var m=$("#main");
   m.innerHTML=S.view==="villas"?vVillas():S.view==="edit"?vEdit():S.view==="settings"?vSettings():vHelp();
-  if(S.view==="edit"){chips();photos();priceRows()}
+  if(S.view==="edit"){chips();photos();priceRows();calRender()}
   window.scrollTo(0,0)
 }
 function ch(){S.dirty=true}
@@ -191,8 +196,8 @@ function vVillas(){
   return h+'</div>'
 }
 function vp(v){var a=(v.prices||[]).filter(function(x){return+x.price>0});return a.length?a:(+v.price?[{label:"",price:v.price}]:[])}
-function newV(){S.idx=-1;S.ed={name:"",category:"",location:"",guests:2,rooms:1,prices:[{label:"Weekday",price:0},{label:"Weekend",price:0}],description:"",facilities:[],photos:[]};S.dirty=false;S.view="edit";render()}
-function editV(i){S.idx=i;S.ed=JSON.parse(JSON.stringify(S.villas[i]));S.ed.facilities=S.ed.facilities||[];S.ed.photos=S.ed.photos||[];S.ed.prices=S.ed.prices&&S.ed.prices.length?S.ed.prices:(+S.ed.price?[{label:"Per malam",price:+S.ed.price}]:[]);S.dirty=false;S.view="edit";render()}
+function newV(){S.cy=null;S.idx=-1;S.ed={name:"",category:"",location:"",guests:2,rooms:1,prices:[{label:"Weekday",price:0},{label:"Weekend",price:0}],description:"",facilities:[],photos:[]};S.dirty=false;S.view="edit";render()}
+function editV(i){S.cy=null;S.idx=i;S.ed=JSON.parse(JSON.stringify(S.villas[i]));S.ed.facilities=S.ed.facilities||[];S.ed.photos=S.ed.photos||[];S.ed.prices=S.ed.prices&&S.ed.prices.length?S.ed.prices:(+S.ed.price?[{label:"Per malam",price:+S.ed.price}]:[]);S.dirty=false;S.view="edit";render()}
 function delV(i){
   if(!confirm('Hapus villa "'+S.villas[i].name+'" dari website? Tindakan ini tidak bisa dibatalkan dari panel.'))return;
   var old=S.villas.slice();S.villas.splice(i,1);
@@ -219,6 +224,7 @@ function vEdit(){
   '<div class="sug">'+SUG.map(function(s,i){return'<button onclick="addF(SUG['+i+'])">+ '+esc(s)+'</button>'}).join("")+'</div><div class="chips" id="chips"></div></div>'+
   '<div class="card"><h2>6. Foto villa</h2><p class="d">Foto pertama menjadi foto sampul di kartu villa. Foto otomatis dikecilkan (maksimal 1600 piksel) supaya website tetap cepat.</p>'+
   '<label class="drop">+ Klik untuk menambah foto<small>Boleh pilih beberapa foto sekaligus (JPG, PNG, WebP)</small><input type="file" accept="image/*" multiple hidden onchange="upl(this.files);this.value=\'\'"></label><div class="ph" id="ph"></div></div>'+
+  '<div class="card"><h2>7. Kalender ketersediaan</h2><p class="d">Klik tanggal untuk menandai villa ini <b>penuh</b>. Klik sekali lagi untuk mengosongkannya. Tanggal yang sudah lewat dibersihkan otomatis saat disimpan. Pengunjung website melihat kalender ini di jendela detail villa.</p><div id="cal"></div></div>'+
   '<div class="bar"><span class="n">Perubahan baru tampil di website sekitar 1 menit setelah disimpan.</span><button class="btn ghost" onclick="go(\'villas\')">Batal</button><button class="btn" id="sv" onclick="saveV()">Simpan villa</button></div>'
 }
 function priceRows(){
@@ -253,10 +259,29 @@ function upl(files){
     }).then(next).catch(function(e){toast(errMsg(e),1);next()})
   })()
 }
+var BLN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+function ymd(y,m,d){return y+"-"+("0"+(m+1)).slice(-2)+"-"+("0"+d).slice(-2)}
+function todayS(){var t=new Date();return ymd(t.getFullYear(),t.getMonth(),t.getDate())}
+function calRender(){
+  var c=$("#cal");if(!c)return;var e=S.ed;e.booked=e.booked||[];
+  if(S.cy==null){var t=new Date();S.cy=t.getFullYear();S.cm=t.getMonth()}
+  var y=S.cy,m=S.cm,first=(new Date(y,m,1).getDay()+6)%7,days=new Date(y,m+1,0).getDate(),td=todayS(),h="";
+  ["Sen","Sel","Rab","Kam","Jum","Sab","Min"].forEach(function(w){h+='<div class="w">'+w+'</div>'});
+  for(var i=0;i<first;i++)h+='<div></div>';
+  for(var d=1;d<=days;d++){var k=ymd(y,m,d),full=e.booked.indexOf(k)>=0;
+    h+='<button type="button" class="'+(full?"full ":"")+(k<td?"past":"")+'" aria-pressed="'+full+'" aria-label="'+d+' '+BLN[m]+' '+y+(full?', penuh':', kosong')+'" onclick="calTog(\''+k+'\')">'+d+'</button>'}
+  var n=e.booked.filter(function(k){return k>=td}).length;
+  c.innerHTML='<div class="calh"><button type="button" class="btn ghost sm" onclick="calNav(-1)" aria-label="Bulan sebelumnya">←</button><b>'+BLN[m]+' '+y+'</b><button type="button" class="btn ghost sm" onclick="calNav(1)" aria-label="Bulan berikutnya">→</button></div><div class="calg">'+h+'</div>'+
+  '<div class="calleg"><span>Kosong</span><span class="f">Penuh</span><span>'+n+' tanggal penuh ke depan</span></div>'+
+  '<div class="pb" style="margin-top:12px"><button type="button" class="btn ghost sm" onclick="calClear()">Kosongkan bulan ini</button></div>'
+}
+function calNav(d){S.cm+=d;if(S.cm<0){S.cm=11;S.cy--}if(S.cm>11){S.cm=0;S.cy++}calRender()}
+function calTog(k){var b=S.ed.booked=S.ed.booked||[],i=b.indexOf(k);if(i>=0)b.splice(i,1);else b.push(k);ch();calRender()}
+function calClear(){var p=S.cy+"-"+("0"+(S.cm+1)).slice(-2)+"-";S.ed.booked=(S.ed.booked||[]).filter(function(k){return k.indexOf(p)!==0});ch();calRender()}
 function saveV(){
   var e=S.ed;
   if(!e.name.trim()||!e.category.trim()){toast("Nama dan kategori wajib diisi.",1);return}
-  var old=S.villas.slice(),copy=JSON.parse(JSON.stringify(e));copy.name=copy.name.trim();copy.category=copy.category.trim();copy.prices=(copy.prices||[]).map(function(x){return{label:String(x.label||"").trim(),price:+x.price||0}}).filter(function(x){return x.label&&x.price>0});copy.price=copy.prices.length?Math.min.apply(null,copy.prices.map(function(x){return x.price})):0;
+  var old=S.villas.slice(),copy=JSON.parse(JSON.stringify(e));copy.name=copy.name.trim();copy.category=copy.category.trim();copy.prices=(copy.prices||[]).map(function(x){return{label:String(x.label||"").trim(),price:+x.price||0}}).filter(function(x){return x.label&&x.price>0});var _t=todayS();copy.booked=(copy.booked||[]).filter(function(k,i,r){return /^\d{4}-\d{2}-\d{2}$/.test(k)&&k>=_t&&r.indexOf(k)===i}).sort();copy.price=copy.prices.length?Math.min.apply(null,copy.prices.map(function(x){return x.price})):0;
   if(S.idx<0){S.villas.push(copy);S.idx=S.villas.length-1}else S.villas[S.idx]=copy;
   var b=$("#sv");b.disabled=true;b.textContent="Menyimpan…";
   saveVillas().then(function(){S.dirty=false;toast("Tersimpan. Perubahan tampil di website sekitar 1 menit.");S.view="villas";render()}).catch(function(x){S.villas=old;b.disabled=false;b.textContent="Simpan villa";toast(errMsg(x),1)})

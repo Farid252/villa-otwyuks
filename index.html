@@ -67,6 +67,13 @@ dialog::backdrop{background:rgba(10,5,2,.65)}
 .foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-weight:600}
 .foot small{font-weight:400;color:var(--muted)}
 .prl{margin:0 0 10px}.prl div{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:4px 0;border-bottom:1px dashed var(--line);font-size:.92rem}.prl div:last-child{border-bottom:0}.prl small{color:var(--muted)}
+.cal{max-width:420px;margin:0 0 6px}.calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.calh b{font-size:1rem}
+.calh button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit;cursor:pointer}.calh button:disabled{opacity:.35;cursor:default}.calh button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}.cg .w{font-size:.74rem;font-weight:600;color:var(--muted)}
+.cg .d{padding:8px 0;border-radius:6px;font-size:.9rem;border:1px solid var(--line);background:var(--card)}.cg .d.full{background:#fde3e1;border-color:#efb5b0;color:#b3261e;font-weight:700;text-decoration:line-through}.cg .d.past{opacity:.4}.cg .d.td{outline:2px solid var(--accent);outline-offset:-2px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cg .d.full{background:#4a1f1b;border-color:#7a3a34;color:#ffb4ab}}
+:root[data-theme="dark"] .cg .d.full{background:#4a1f1b;border-color:#7a3a34;color:#ffb4ab}
+.cleg{display:flex;gap:16px;font-size:.84rem;color:var(--muted);margin:8px 0 18px}.cleg span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;border:1px solid var(--line);background:var(--card)}.cleg .f::before{background:#fde3e1;border-color:#efb5b0}
 @media (max-width:720px){.about{grid-template-columns:1fr}.badge{right:10px}.hero{padding:60px 0 70px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -127,6 +134,8 @@ dialog::backdrop{background:rgba(10,5,2,.65)}
     <p id="ddesc"></p>
     <h4>Fasilitas villa</h4>
     <ul class="fac" id="dfac"></ul>
+    <h4>Ketersediaan</h4>
+    <div class="cal" id="dcal"></div><div class="cleg"><span>Kosong</span><span class="f">Penuh</span></div>
     <div class="foot"><span id="dprice"></span><a class="btn" id="dwa" target="_blank" rel="noopener">Pesan lewat WhatsApp</a></div>
   </div>
 </dialog>
@@ -174,6 +183,17 @@ function pics(v){var c=v.b.split(",");
 function showPic(i){var m=document.getElementById("dm");m.style.background=cp[i].bg;m.textContent="";
   var s=document.createElement("span");s.textContent=cp[i].cap;m.appendChild(s);
   Array.prototype.forEach.call(document.getElementById("dth").children,function(t,j){t.setAttribute("aria-current",j===i)})}
+var BLN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],CAL={y:0,m:0,bk:[],y0:0,m0:0};
+function ymd(y,m,d){return y+"-"+("0"+(m+1)).slice(-2)+"-"+("0"+d).slice(-2)}
+function calShow(){
+  var y=CAL.y,m=CAL.m,t=new Date(),td=ymd(t.getFullYear(),t.getMonth(),t.getDate()),first=(new Date(y,m,1).getDay()+6)%7,days=new Date(y,m+1,0).getDate(),idx=(y-CAL.y0)*12+(m-CAL.m0),h="";
+  ["Sen","Sel","Rab","Kam","Jum","Sab","Min"].forEach(function(w){h+='<div class="w">'+w+'</div>'});
+  for(var i=0;i<first;i++)h+="<div></div>";
+  for(var d=1;d<=days;d++){var k=ymd(y,m,d),f=CAL.bk.indexOf(k)>=0;h+='<div class="d'+(f?" full":"")+(k<td?" past":"")+(k===td?" td":"")+'"'+(f?' title="Penuh"':"")+'>'+d+'</div>'}
+  document.getElementById("dcal").innerHTML='<div class="calh"><button type="button" aria-label="Bulan sebelumnya" onclick="calGo(-1)"'+(idx<=0?" disabled":"")+'>←</button><b>'+BLN[m]+" "+y+'</b><button type="button" aria-label="Bulan berikutnya" onclick="calGo(1)"'+(idx>=11?" disabled":"")+'>→</button></div><div class="cg">'+h+'</div>'
+}
+function calGo(d){CAL.m+=d;if(CAL.m<0){CAL.m=11;CAL.y--}if(CAL.m>11){CAL.m=0;CAL.y++}calShow()}
+function calOpen(v){var t=new Date();CAL.y=CAL.y0=t.getFullYear();CAL.m=CAL.m0=t.getMonth();CAL.bk=v.bk||[];calShow()}
 function openV(v){
   cp=pics(v);var th=document.getElementById("dth");th.innerHTML="";
   cp.forEach(function(p,i){var b=document.createElement("button");b.className="th";b.setAttribute("aria-label","Foto "+p.cap);b.style.background=p.bg;b.onclick=function(){showPic(i)};th.appendChild(b)});
@@ -184,7 +204,7 @@ function openV(v){
   (v.fac&&v.fac.length?v.fac:(FAC[v.c]||[])).forEach(function(x){var li=document.createElement("li");li.textContent=x;f.appendChild(li)});
   document.getElementById("dprice").innerHTML=v.pr.length?v.pr.map(function(x){return"<div>"+esc(x.l)+": "+rp(x.p)+" <small>/ malam</small></div>"}).join(""):"Hubungi kami untuk harga";
   document.getElementById("dwa").href="https://wa.me/"+WA+"?text="+encodeURIComponent("Halo, saya ingin memesan "+v.n);
-  showPic(0);dlg.showModal();
+  calOpen(v);showPic(0);dlg.showModal();
 }
 document.getElementById("dx").onclick=function(){dlg.close()};
 dlg.addEventListener("click",function(e){if(e.target===dlg)dlg.close()});
@@ -204,7 +224,7 @@ Promise.all([loadJSON("data/villas.json"),loadJSON("data/settings.json")]).then(
   if(S.hero_image){document.querySelector(".hero").style.background="linear-gradient(90deg,rgba(15,8,3,.88),rgba(15,8,3,.3)),url('"+encodeURI(S.hero_image)+"') center/cover no-repeat"}
   document.getElementById("fwa").href="https://wa.me/"+WA;
   document.getElementById("fem").href="mailto:"+(S.email||"");
-  villas=V.map(function(v,i){return{n:v.name||"",c:v.category||"",l:v.location||"",g:+v.guests||0,k:+v.rooms||0,pr:prs(v),p:minp(prs(v)),b:PAL[i%PAL.length],desc:v.description||"",fac:v.facilities||[],imgs:(v.photos||[]).filter(function(p){return p.image}).map(function(p){return{src:p.image,cap:p.caption||""}})}});
+  villas=V.map(function(v,i){return{n:v.name||"",c:v.category||"",l:v.location||"",g:+v.guests||0,k:+v.rooms||0,pr:prs(v),p:minp(prs(v)),b:PAL[i%PAL.length],desc:v.description||"",fac:v.facilities||[],bk:(v.booked||[]),imgs:(v.photos||[]).filter(function(p){return p.image}).map(function(p){return{src:p.image,cap:p.caption||""}})}});
   cats=["Semua"].concat(villas.reduce(function(x,v){if(v.c&&x.indexOf(v.c)<0)x.push(v.c);return x},[]));
   render();
 }).catch(function(){grid.textContent="Data villa gagal dimuat. Buka lewat alamat website, bukan dengan membuka file langsung."});

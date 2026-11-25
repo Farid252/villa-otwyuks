@@ -70,6 +70,21 @@ textarea{min-height:96px;resize:vertical}
 .calg button{border:1px solid var(--l);background:#fff;border-radius:10px;padding:10px 0;font:inherit;cursor:pointer;color:var(--t)}
 .calg button:hover{border-color:var(--o)}.calg button.full{background:#fde3e1;border-color:#efb5b0;color:var(--x);font-weight:700}.calg button.past{opacity:.45}
 .calleg{display:flex;gap:16px;flex-wrap:wrap;font-size:.86rem;color:var(--m);margin:12px 0 0}.calleg span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid var(--l);background:#fff}.calleg .f::before{background:#fde3e1;border-color:#efb5b0}
+
+/* animasi halus */
+.nav{transition:background-color .25s ease,transform .25s ease}.nav:hover{transform:translateX(4px)}
+.btn{transition:transform .2s ease,box-shadow .25s ease,background-color .25s ease,opacity .2s ease}.btn:hover:not(:disabled){transform:translateY(-1px)}
+.vc{transition:transform .3s ease,box-shadow .3s ease}.vc:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(42,23,12,.14)}
+.chip button,.sug button,.drop,.pi{transition:background-color .2s ease,border-color .2s ease,color .2s ease,transform .2s ease}.drop:hover{background:#fff3df;border-color:var(--o)}
+.calg button{transition:background-color .2s ease,border-color .2s ease,transform .15s ease}.calg button:active{transform:scale(.94)}
+input,textarea{transition:border-color .2s ease,box-shadow .2s ease}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.ani .top{animation:fade .35s ease both}
+.ani .card,.ani .vc,.ani .empty{animation:up .45s ease both}
+.ani .card:nth-of-type(2),.ani .vc:nth-child(2){animation-delay:.05s}.ani .card:nth-of-type(3),.ani .vc:nth-child(3){animation-delay:.1s}.ani .card:nth-of-type(4),.ani .vc:nth-child(4){animation-delay:.15s}.ani .card:nth-of-type(n+5),.ani .vc:nth-child(n+5){animation-delay:.2s}
+#toast{transition:opacity .3s ease,transform .3s ease}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 .prrow{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-bottom:10px}.prrow input{margin:0}
 .ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-top:16px}
 .pi{border:1px solid var(--l);border-radius:12px;padding:8px;background:#fff}
@@ -179,6 +194,7 @@ function render(){
   var m=$("#main");
   m.innerHTML=S.view==="villas"?vVillas():S.view==="edit"?vEdit():S.view==="settings"?vSettings():vHelp();
   if(S.view==="edit"){chips();photos();priceRows();calRender()}
+  m.classList.remove("ani");void m.offsetWidth;m.classList.add("ani");clearTimeout(render.t);render.t=setTimeout(function(){m.classList.remove("ani")},900);
   window.scrollTo(0,0)
 }
 function ch(){S.dirty=true}

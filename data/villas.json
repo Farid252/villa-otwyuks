@@ -44,7 +44,7 @@
         },
         {
           "image": "foto/villa-nirwana-2-mwtggrwa0.jpg",
-          "caption": ""
+          "caption": "Biliard"
         }
       ],
       "prices": [
@@ -57,7 +57,8 @@
           "price": 3800000
         }
       ],
-      "booked": []
+      "booked": [],
+      "maps": ""
     }
   ]
 }

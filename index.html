@@ -75,6 +75,11 @@ h2{font-size:clamp(1.55rem,3.2vw,2.15rem);font-weight:800;letter-spacing:-.015em
 .meta{color:var(--muted);font-size:.85rem;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:6px 16px}
 .meta span{display:inline-flex;align-items:center;gap:6px}
 .meta svg{width:14px;height:14px;flex:0 0 auto;opacity:.75}
+.meta a.loc{display:inline-flex;align-items:center;gap:6px;color:var(--green-d);background:var(--sage);padding:3px 12px;border-radius:999px;font-weight:600;text-decoration:none;transition:background-color .2s ease,color .2s ease}
+.meta a.loc:hover{background:var(--green);color:#fff}
+.meta a.loc svg{opacity:1}
+#dmeta a{color:var(--green);font-weight:600;text-decoration:none}
+#dmeta a:hover{text-decoration:underline}
 .prl{margin:0 0 12px}
 .prl div{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line);font-size:.9rem}
 .prl div:last-child{border-bottom:0}
@@ -268,9 +273,15 @@ var IC={
  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
  bed:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v5"/></svg>'
 };
+function mapsUrl(v){
+ if(v.mp&&/^https?:\/\//i.test(v.mp))return v.mp;
+ if(v.l)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.l+", Puncak, Jawa Barat, Indonesia")+"&hl=id";
+ return "";
+}
 function metaHtml(v){
- var p=[];
- if(v.l)p.push('<span>'+IC.pin+esc(v.l)+'</span>');
+ var p=[],mu=mapsUrl(v);
+ if(mu){var lt=v.l||"Lihat lokasi";p.push('<a class="loc" href="'+mu+'" target="_blank" rel="noopener" title="Buka di Google Maps" onclick="event.stopPropagation()">'+IC.pin+esc(lt)+'</a>')}
+ else if(v.l){p.push('<span>'+IC.pin+esc(v.l)+'</span>')}
  p.push('<span>'+IC.users+v.g+' tamu</span>');
  p.push('<span>'+IC.bed+v.k+' kamar</span>');
  return p.join("");
@@ -285,7 +296,7 @@ function render(){
   });
   grid.innerHTML="";
   villas.filter(function(v){return cur==="Semua"||v.c===cur}).forEach(function(v){
-    var d=document.createElement("article");d.className="villa";d.style.animationDelay=Math.min(grid.children.length,8)*60+"ms";d.tabIndex=0;d.setAttribute("role","button");d.onclick=function(){openV(v)};d.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();openV(v)}};
+    var d=document.createElement("article");d.className="villa";d.style.animationDelay=Math.min(grid.children.length,8)*60+"ms";d.tabIndex=0;d.setAttribute("role","button");d.onclick=function(){openV(v)};d.onkeydown=function(e){if(e.target.closest&&e.target.closest("a"))return;if(e.key==="Enter"||e.key===" "){e.preventDefault();openV(v)}};
     d.innerHTML='<div class="pic" style="background:'+cover(v)+'"><span>'+esc(v.c)+'</span></div>'+
     '<div class="body"><h3>'+esc(v.n)+'</h3><p class="meta">'+metaHtml(v)+'</p>'+
     '<div class="prl">'+prHtml(v)+'</div><div class="price"><span class="more">Lihat foto &amp; fasilitas</span></div></div>';
@@ -325,7 +336,8 @@ function openV(v){
   cp=pics(v);var th=document.getElementById("dth");th.innerHTML="";
   cp.forEach(function(p,i){var b=document.createElement("button");b.className="th";b.setAttribute("aria-label","Foto "+p.cap);b.style.background=p.bg;b.onclick=function(){showPic(i)};th.appendChild(b)});
   document.getElementById("dt").textContent=v.n;
-  document.getElementById("dmeta").textContent=v.c+" · "+v.l+" · "+v.g+" tamu · "+v.k+" kamar";
+  var mu=mapsUrl(v),locHtml=mu?'<a href="'+mu+'" target="_blank" rel="noopener" title="Buka di Google Maps">'+esc(v.l||"Lihat lokasi di peta")+"</a>":esc(v.l||"");
+  document.getElementById("dmeta").innerHTML=[esc(v.c),locHtml,v.g+" tamu",v.k+" kamar"].filter(Boolean).join(' <span aria-hidden="true">·</span> ');
   document.getElementById("ddesc").textContent=v.desc||"";
   var f=document.getElementById("dfac");f.innerHTML="";
   (v.fac&&v.fac.length?v.fac:(FAC[v.c]||[])).forEach(function(x){var li=document.createElement("li");li.textContent=x;f.appendChild(li)});
@@ -352,7 +364,7 @@ Promise.all([loadJSON("data/villas.json"),loadJSON("data/settings.json")]).then(
   document.getElementById("fwa").href="https://wa.me/"+WA;
   document.getElementById("fem").href="mailto:"+(S.email||"");
   var yr=document.getElementById("yr");if(yr)yr.textContent=new Date().getFullYear();
-  villas=V.map(function(v,i){return{n:v.name||"",c:v.category||"",l:v.location||"",g:+v.guests||0,k:+v.rooms||0,pr:prs(v),p:minp(prs(v)),b:PAL[i%PAL.length],desc:v.description||"",fac:v.facilities||[],bk:(v.booked||[]),imgs:(v.photos||[]).filter(function(p){return p.image}).map(function(p){return{src:p.image,cap:p.caption||""}})}});
+  villas=V.map(function(v,i){return{n:v.name||"",c:v.category||"",l:v.location||"",mp:v.maps||"",g:+v.guests||0,k:+v.rooms||0,pr:prs(v),p:minp(prs(v)),b:PAL[i%PAL.length],desc:v.description||"",fac:v.facilities||[],bk:(v.booked||[]),imgs:(v.photos||[]).filter(function(p){return p.image}).map(function(p){return{src:p.image,cap:p.caption||""}})}});
   cats=["Semua"].concat(villas.reduce(function(x,v){if(v.c&&x.indexOf(v.c)<0)x.push(v.c);return x},[]));
   render();
 }).catch(function(){grid.textContent="Data villa gagal dimuat. Buka lewat alamat website, bukan dengan membuka file langsung."});

@@ -412,7 +412,7 @@ function defaultDash(){return{
   ]}}
 function vDash(){
   var d=S.dash;
-  var h='<div class="top"><div><h1>Dashboard / Halaman Tautan</h1><p class="sub">Halaman ringkas berisi logo, nama, dan tombol-tautan (katalog, Food, WhatsApp, TikTok, YouTube). Semua isi diatur dari sini dan disimpan ke data/dashboard.json. Pratinjau: <a href="../dashboard.html" target="_blank" rel="noopener">buka dashboard</a>.</p></div><a class="btn ghost" href="../dashboard.html" target="_blank" rel="noopener">Lihat dashboard</a></div>';
+  var h='<div class="top"><div><h1>Dashboard / Halaman Tautan</h1></div><a class="btn ghost" href="../dashboard.html" target="_blank" rel="noopener">Lihat dashboard</a></div>';
   h+='<div class="card"><h2>1. Identitas</h2><p class="d">Nama, slogan, logo bulat, dan pesan WhatsApp yang tampil di dashboard.</p>'+
   '<div class="row">'+
   '<div class="f"><label for="db_brand">Nama usaha</label><p class="h">Judul besar di tengah dashboard.</p><input type="text" id="db_brand" value="'+esc(d.brand||"")+'" oninput="S.dash.brand=this.value;ch()"></div>'+

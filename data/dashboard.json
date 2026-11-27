@@ -1,0 +1,44 @@
+{
+  "brand": "Villa OtW.yUkS",
+  "tagline": "Sewa Villa Lengkap di Puncak",
+  "logo": "foto/logo-mwuben70.png",
+  "footer": "Sewa Villa Lengkap di Puncak",
+  "wa_text": "Halo, saya tertarik dengan villa. Boleh info ketersediaan dan harganya?",
+  "buttons": [
+    {
+      "icon": "home",
+      "label": "Catalog Villa",
+      "sub": "Lihat daftar villa, foto, dan harga",
+      "href": "index.html",
+      "enabled": true
+    },
+    {
+      "icon": "food",
+      "label": "Food",
+      "sub": "Menu makanan dan katering",
+      "href": "",
+      "enabled": true
+    },
+    {
+      "icon": "tiktok",
+      "label": "TikTok",
+      "sub": "Ikuti keseruan di TikTok",
+      "href": "",
+      "enabled": true
+    },
+    {
+      "icon": "wa",
+      "label": "WhatsApp",
+      "sub": "Balas cepat pemesanan villa",
+      "href": "",
+      "enabled": true
+    },
+    {
+      "icon": "yt",
+      "label": "YouTube",
+      "sub": "Tonton video villa",
+      "href": "",
+      "enabled": true
+    }
+  ]
+}

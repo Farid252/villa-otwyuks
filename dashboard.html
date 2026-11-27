@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard Villa OtW.yUkS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e7a55'/%3E%3Cpath d='M16 7c4 3 6 7 6 11a6 6 0 1 1-12 0c0-4 2-8 6-11z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0e7a55;--green-d:#0a5c40;--green-dd:#0b3d2e;--teal:#0f766e;
+  --card:#ffffff;--ink:#13241b;--muted:#bcd9cb;--sub:#567065;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  min-height:100dvh;color:#fff;font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5;
+  background:linear-gradient(165deg,#0b3d2e 0%,#10593f 55%,#0f766e 100%);
+}
+.dash{width:min(430px,100%);margin:0 auto;min-height:100dvh;padding:44px 24px calc(28px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+.brand-zone{text-align:center;margin:6px 0 30px}
+.logo{width:126px;height:126px;margin:0 auto 18px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);display:grid;place-items:center;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:cover;display:block}
+.logo svg{width:62px;height:62px;color:#9fdcc0}
+h1{font-family:"Bricolage Grotesque","Plus Jakarta Sans",sans-serif;font-weight:800;font-size:1.75rem;letter-spacing:.02em;margin:0 0 8px}
+.tagline{margin:0;color:var(--muted);font-size:.95rem}
+.links{display:flex;flex-direction:column;gap:14px}
+.link{display:flex;align-items:center;gap:15px;background:var(--card);color:var(--green-dd);text-decoration:none;border-radius:999px;padding:14px 22px;box-shadow:0 12px 26px rgba(4,35,25,.35);transition:transform .2s ease,box-shadow .2s ease}
+.link:hover,.link:focus-visible{transform:translateY(-2px);box-shadow:0 16px 32px rgba(4,35,25,.45)}
+.link:focus-visible{outline:3px solid #9fdcc0;outline-offset:2px}
+.link svg{width:22px;height:22px;flex:0 0 auto;color:var(--green)}
+.link .txt{display:flex;flex-direction:column;min-width:0}
+.link b{font-size:1rem;font-weight:700}
+.link small{display:block;font-weight:500;font-size:.8rem;color:var(--sub);margin-top:1px}
+.link.soon{opacity:.55;cursor:default}
+.foot{margin-top:auto;padding-top:30px;text-align:center;color:rgba(236,247,241,.65);font-size:.78rem}
+.foot b{font-family:"Bricolage Grotesque",sans-serif}
+@media (max-width:380px){
+  .dash{padding:34px 18px 24px}
+  .link{padding:13px 18px;gap:12px}
+}
+</style>
+</head>
+<body>
+<main class="dash">
+  <div class="brand-zone">
+    <div class="logo" id="logo"></div>
+    <h1 id="brand">Villa OtW.yUkS</h1>
+    <p class="tagline" id="tagline"></p>
+  </div>
+
+  <nav class="links" id="links" aria-label="Tautan utama"></nav>
+
+  <p class="foot">© <span id="yr"></span> <b id="footbrand">Villa OtW.yUkS</b> — <span id="footnote"></span></p>
+</main>
+
+<script>
+/* ===== Konfigurasi halaman ini diatur lewat Panel Admin → Dashboard.
+   Data dibaca dari data/dashboard.json; bila belum ada, memakai bawaan
+   di bawah lalu mengambil nama/tagline/logo dari data/settings.json. === */
+var ICONS={
+ home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M9.5 20v-5h5v5"/></svg>',
+ food:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16l-1.5 11a2 2 0 0 1-2 1.8H7.5a2 2 0 0 1-2-1.8L4 8z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>',
+ tiktok:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 3c.4 2.3 1.8 3.8 4.1 4v3c-1.5 0-2.9-.5-4.1-1.3v6.3a6.2 6.2 0 1 1-6.2-6.2c.3 0 .7 0 1 .1v3.2a3 3 0 1 0 2.2 2.9V3h3z"/></svg>',
+ wa:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2zm0 18.1h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.63.8-.77.97-.14.16-.28.18-.53.06-.25-.12-1.05-.38-1.99-1.23-.73-.66-1.22-1.47-1.37-1.72-.14-.24-.02-.37.11-.51.11-.11.24-.28.36-.42.12-.14.16-.25.24-.41.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.16 0-.43.06-.66.31-.22.24-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.16 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.28z"/></svg>',
+ yt:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8c1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3L10 15z"/></svg>',
+ globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></svg>'
+};
+var DEFAULT_BUTTONS=[
+ {icon:"home", label:"Catalog Villa", sub:"Lihat daftar villa, foto, dan harga", href:"index.html", enabled:true},
+ {icon:"food", label:"Food",        sub:"Menu makanan dan katering",            href:"",          enabled:true},
+ {icon:"tiktok",label:"TikTok",     sub:"Ikuti keseruan di TikTok",             href:"",          enabled:true},
+ {icon:"wa",    label:"WhatsApp",   sub:"Balas cepat pemesanan villa",           href:"",          enabled:true},
+ {icon:"yt",    label:"YouTube",    sub:"Tonton video villa",                    href:"",          enabled:true}
+];
+var CFG=null,SET=null;
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function cfg(){
+  var d=CFG||{},s=SET||{};
+  return{
+    brand:d.brand||s.brand||"Villa OtW.yUkS",
+    tagline:d.tagline||s.tagline||"",
+    logo:d.logo||s.about_logo||"",
+    footer:d.footer||d.tagline||s.tagline||"",
+    wa_text:d.wa_text||"Halo, saya tertarik dengan villa. Boleh info ketersediaan dan harganya?",
+    buttons:(d.buttons&&d.buttons.length)?d.buttons:DEFAULT_BUTTONS
+  };
+}
+function applyLogo(src){
+  var box=document.getElementById("logo");
+  box.innerHTML="";
+  if(!src){box.innerHTML=ICONS.home;return}
+  var img=new Image();img.alt="Logo usaha";img.src=src;
+  img.onerror=function(){box.innerHTML="";box.innerHTML=ICONS.home};
+  box.appendChild(img);
+}
+function renderLinks(buttons,wa,waText){
+  var box=document.getElementById("links");box.innerHTML="";
+  buttons.forEach(function(it){
+    if(it.enabled===false)return;
+    var icon=ICONS[it.icon]||ICONS.globe;
+    var href=String(it.href||"").trim();
+    if(it.icon==="wa"&&!href&&wa)href="https://wa.me/"+wa+"?text="+encodeURIComponent(waText||"");
+    var soon=!href;
+    var a=document.createElement("a");
+    a.className="link"+(soon?" soon":"");
+    if(!soon){
+      a.href=href;
+      if(/^https?:\/\//i.test(href)){a.target="_blank";a.rel="noopener"}
+    }else{a.href="#";a.setAttribute("aria-disabled","true")}
+    var sub=String(it.sub||"")+(soon?" (segera hadir)":"");
+    a.innerHTML=icon+'<span class="txt"><b>'+esc(it.label||"")+'</b>'+(sub?'<small>'+esc(sub)+'</small>':"")+'</span>';
+    if(soon)a.addEventListener("click",function(e){e.preventDefault()});
+    box.appendChild(a);
+  });
+}
+function renderAll(){
+  var c=cfg();
+  document.title=cbrand(c.brand);
+  document.getElementById("brand").textContent=c.brand;
+  document.getElementById("tagline").textContent=c.tagline;
+  document.getElementById("footbrand").textContent=c.brand;
+  document.getElementById("footnote").textContent=c.footer;
+  applyLogo(c.logo);
+  renderLinks(c.buttons,(SET&&SET.wa)||"",c.wa_text);
+}
+function cbrand(b){return b+" — Dashboard"}
+
+document.getElementById("yr").textContent=new Date().getFullYear();
+renderAll();
+
+fetch("data/dashboard.json",{cache:"no-store"})
+  .then(function(r){return r.ok?r.json():null})
+  .catch(function(){return null})
+  .then(function(D){
+    CFG=D||{};
+    return fetch("data/settings.json",{cache:"no-store"})
+      .then(function(r){if(!r.ok)throw new Error("settings");return r.json()})
+      .catch(function(){return null});
+  })
+  .then(function(S){SET=S||null;renderAll()})
+  .catch(function(){renderAll()});
+</script>
+</body>
+</html>

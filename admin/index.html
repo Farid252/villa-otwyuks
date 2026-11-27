@@ -116,6 +116,15 @@ input,textarea{transition:border-color .2s ease,box-shadow .2s ease}
 .qa b{display:block}
 .qa p{margin:4px 0 0;color:var(--m);font-size:.92rem}
 .err{color:var(--x);font-size:.9rem;min-height:1.3em;margin:8px 0 0}
+select{width:100%;padding:11px 13px;border:1px solid var(--l);border-radius:12px;background:#fff;color:var(--t)}
+select:focus{border-color:var(--o);box-shadow:0 0 0 3px rgba(14,122,85,.12)}
+.drow{border:1px solid var(--l);border-radius:14px;padding:14px 16px;margin-bottom:14px;background:#fbfdfc}
+.drow.off{opacity:.55}
+.drow .dh{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.drow .dh b{font-family:"Bricolage Grotesque","Plus Jakarta Sans",sans-serif;font-size:.98rem}
+.dbadge{background:var(--o);color:#fff;border-radius:50%;width:24px;height:24px;display:grid;place-items:center;font-size:.8rem;font-weight:700;flex:0 0 auto}
+.dopts{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-left:auto}
+.dopts label{display:inline-flex;gap:6px;align-items:center;font-size:.85rem;color:var(--m)}
 @media (max-width:820px){
  #app{flex-direction:column}
  aside{width:auto;flex:none;height:auto;position:static;flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px}
@@ -137,6 +146,8 @@ input,textarea{transition:border-color .2s ease,box-shadow .2s ease}
  .lbox{padding:24px 20px}
  .f input,.f textarea{min-width:0}
  .vc .va{gap:8px}
+ .dopts{margin-left:0;width:100%}
+ .drow .dh b{flex:1}
 }
 @media (prefers-reduced-motion:reduce){#toast{transition:none}}
 </style>
@@ -161,6 +172,7 @@ input,textarea{transition:border-color .2s ease,box-shadow .2s ease}
     <div class="bs">Kelola isi website</div>
     <button class="nav" data-v="villas" onclick="go('villas')">Daftar Villa</button>
     <button class="nav" data-v="settings" onclick="go('settings')">Pengaturan Website</button>
+    <button class="nav" data-v="dash" onclick="go('dash')">Dashboard</button>
     <button class="nav" data-v="help" onclick="go('help')">Bantuan</button>
     <div class="sp"></div>
     <a class="nav" href="../" target="_blank" rel="noopener">Lihat website</a>
@@ -172,7 +184,7 @@ input,textarea{transition:border-color .2s ease,box-shadow .2s ease}
 
 <script>
 var REPO="Farid252/villa-otwyuks",ADMIN_USER="admin";
-var S={tok:"",repo:"",villas:[],set:{},shaV:"",shaS:"",view:"villas",ed:null,idx:-1,prev:{},dirty:false};
+var S={tok:"",repo:"",villas:[],set:{},dash:null,shaV:"",shaS:"",shaD:"",view:"villas",ed:null,idx:-1,prev:{},dirty:false};
 var SUG=["Wi-Fi","AC di semua kamar","Kolam renang","Dapur lengkap","Parkir luas","Area BBQ","Water heater","TV dan Netflix"];
 var GROUPS=[
  {t:"Identitas website",d:"Nama dan slogan usaha Anda.",f:[
@@ -201,7 +213,10 @@ function rp(n){return "Rp "+Number(n||0).toLocaleString("id-ID")}
 function toast(m,bad){var t=$("#toast");t.textContent=m;t.className="show"+(bad?" bad":"");clearTimeout(toast.t);toast.t=setTimeout(function(){t.className=""},4500)}
 function api(path,o){o=o||{};return fetch("https://api.github.com/repos/"+S.repo+path,{method:o.method||"GET",cache:"no-store",headers:{"Authorization":"Bearer "+S.tok,"Accept":"application/vnd.github+json","Content-Type":"application/json"},body:o.body?JSON.stringify(o.body):undefined}).then(function(r){return r.json().then(function(j){if(!r.ok){var e=new Error(j.message||("Error "+r.status));e.status=r.status;throw e}return j})})}
 function errMsg(e){if(e.status===401)return"Login User atau Password salah, atau password sudah kedaluwarsa.";if(e.status===404)return"Repository atau file data tidak ditemukan. Cek nama repository dan izin token (Contents: Read and write).";if(e.status===409)return"Data di GitHub sudah berubah (mungkin diedit dari tempat lain). Muat ulang halaman lalu coba lagi.";if(e.status===403)return"Izin token kurang. Pastikan Contents: Read and write.";return e.message||"Terjadi kesalahan."}
-function load(){return Promise.all([api("/contents/data/villas.json"),api("/contents/data/settings.json")]).then(function(a){S.shaV=a[0].sha;S.shaS=a[1].sha;S.villas=JSON.parse(dec(a[0].content)).villas||[];S.set=JSON.parse(dec(a[1].content))})}
+function load(){return Promise.all([api("/contents/data/villas.json"),api("/contents/data/settings.json")]).then(function(a){
+  S.shaV=a[0].sha;S.shaS=a[1].sha;S.villas=JSON.parse(dec(a[0].content)).villas||[];S.set=JSON.parse(dec(a[1].content));
+  return api("/contents/data/dashboard.json").then(function(x){S.shaD=x.sha;S.dash=JSON.parse(dec(x.content));if(!S.dash||!S.dash.buttons)S.dash=defaultDash()}).catch(function(){S.shaD="";S.dash=defaultDash()})
+})}
 function put(path,text,sha,msg){var b={message:msg,content:enc(text)};if(sha)b.sha=sha;return api("/contents/"+path,{method:"PUT",body:b}).then(function(r){return r.content.sha})}
 
 /* login */
@@ -227,8 +242,9 @@ function render(){
   document.querySelectorAll(".nav[data-v]").forEach(function(b){var on=b.getAttribute("data-v")===S.view||(S.view==="edit"&&b.getAttribute("data-v")==="villas");b.classList.toggle("on",on)});
   $("#sbn").textContent=S.set.brand||"Panel Admin";
   var m=$("#main");
-  m.innerHTML=S.view==="villas"?vVillas():S.view==="edit"?vEdit():S.view==="settings"?vSettings():vHelp();
+  m.innerHTML=S.view==="villas"?vVillas():S.view==="edit"?vEdit():S.view==="settings"?vSettings():S.view==="dash"?vDash():vHelp();
   if(S.view==="edit"){chips();photos();priceRows();calRender()}
+  if(S.view==="dash"){dashRows()}
   m.classList.remove("ani");void m.offsetWidth;m.classList.add("ani");clearTimeout(render.t);render.t=setTimeout(function(){m.classList.remove("ani")},900);
   window.scrollTo(0,0)
 }
@@ -381,6 +397,81 @@ function saveS(){
   put("data/settings.json",JSON.stringify(S.set,null,2)+"\n",S.shaS,"Update pengaturan via panel admin").then(function(s){S.shaS=s;S.dirty=false;toast("Pengaturan tersimpan. Tampil di website sekitar 1 menit.");render()}).catch(function(e){b.disabled=false;b.textContent="Simpan pengaturan";toast(errMsg(e),1)})
 }
 
+/* dashboard / halaman tautan */
+var DICONS=[["home","Katalog / Rumah"],["food","Makanan / Food"],["tiktok","TikTok"],["wa","WhatsApp"],["yt","YouTube"],["globe","Tautan lain (globe)"]];
+function defaultDash(){return{
+  brand:S.set.brand||"",tagline:S.set.tagline||"",logo:"",footer:"",
+  wa_text:"Halo, saya tertarik dengan villa. Boleh info ketersediaan dan harganya?",
+  buttons:[
+    {icon:"home",label:"Catalog Villa",sub:"Lihat daftar villa, foto, dan harga",href:"index.html",enabled:true},
+    {icon:"food",label:"Food",sub:"Menu makanan dan katering",href:"",enabled:true},
+    {icon:"tiktok",label:"TikTok",sub:"Ikuti keseruan di TikTok",href:"",enabled:true},
+    {icon:"wa",label:"WhatsApp",sub:"Balas cepat pemesanan villa",href:"",enabled:true},
+    {icon:"yt",label:"YouTube",sub:"Tonton video villa",href:"",enabled:true}
+  ]}}
+function vDash(){
+  var d=S.dash;
+  var h='<div class="top"><div><h1>Dashboard / Halaman Tautan</h1><p class="sub">Halaman ringkas berisi logo, nama, dan tombol-tautan (katalog, Food, WhatsApp, TikTok, YouTube). Semua isi diatur dari sini dan disimpan ke data/dashboard.json. Pratinjau: <a href="../dashboard.html" target="_blank" rel="noopener">buka dashboard</a>.</p></div><a class="btn ghost" href="../dashboard.html" target="_blank" rel="noopener">Lihat dashboard</a></div>';
+  h+='<div class="card"><h2>1. Identitas</h2><p class="d">Nama, slogan, logo bulat, dan pesan WhatsApp yang tampil di dashboard.</p>'+
+  '<div class="row">'+
+  '<div class="f"><label for="db_brand">Nama usaha</label><p class="h">Judul besar di tengah dashboard.</p><input type="text" id="db_brand" value="'+esc(d.brand||"")+'" oninput="S.dash.brand=this.value;ch()"></div>'+
+  '<div class="f"><label for="db_tag">Tagline</label><p class="h">Kalimat kecil di bawah nama. Boleh dipisah tanda titik bulat, mis. "Villa • Staycation • Keluarga".</p><input type="text" id="db_tag" value="'+esc(d.tagline||"")+'" oninput="S.dash.tagline=this.value;ch()"></div>'+
+  '</div>'+
+  '<div class="f"><label for="db_foot">Teks footer <span class="w">opsional</span></label><p class="h">Kalimat kecil paling bawah dashboard. Kosongkan untuk memakai tagline.</p><input type="text" id="db_foot" value="'+esc(d.footer||"")+'" oninput="S.dash.footer=this.value;ch()"></div>'+
+  dashLogoField()+
+  '<div class="f"><label for="db_wat">Pesan WhatsApp</label><p class="h">Teks otomatis saat tombol WhatsApp ditekan. Nomor tujuan memakai Nomor WhatsApp di menu Pengaturan Website.</p><textarea id="db_wat" oninput="S.dash.wa_text=this.value;ch()">'+esc(d.wa_text||"")+'</textarea></div>'+
+  '</div>';
+  h+='<div class="card"><h2>2. Tombol tautan</h2><p class="d">Urutan tombol dari atas ke bawah. Tombol dengan URL kosong tampil redup "segera hadir". Tombol WhatsApp tidak perlu URL — nomor diisi otomatis dari Pengaturan Website.</p><div id="dbtns"></div><button class="btn ghost sm" onclick="addBtn()">+ Tambah tombol</button></div>';
+  h+='<div class="bar"><span class="n">Perubahan baru tampil di dashboard sekitar 1 menit setelah disimpan.</span><button class="btn" id="sd" onclick="saveD()">Simpan dashboard</button></div>';
+  return h;
+}
+function dashLogoField(){
+  var v=S.dash.logo||"";
+  return '<div class="f"><label>Logo bulat <span class="w">opsional</span></label><p class="h">Foto atau logo yang tampil di lingkaran atas. PNG transparan paling bagus. Jika kosong, dashboard memakai logo dari Pengaturan Website, lalu ikon bawaan.</p>'+
+  (v?'<img class="himg" alt="" style="max-width:180px;border-radius:50%;object-fit:cover" src="'+esc(S.prev[v]||("../"+v))+'">':'<div class="empty" style="padding:18px">Belum ada logo khusus dashboard.</div>')+
+  '<div class="pb" style="margin-top:10px"><label class="btn ghost sm" style="cursor:pointer">'+(v?"Ganti logo":"Pilih logo")+'<input type="file" accept="image/*" hidden onchange="upDashLogo(this.files[0]);this.value=\'\'"></label>'+(v?'<button class="btn danger sm" onclick="S.dash.logo=\'\';ch();refDash()">Hapus logo</button>':'')+'</div></div>';
+}
+function dashRows(){
+  var c=$("#dbtns");if(!c)return;
+  c.innerHTML=S.dash.buttons.map(function(b,i){
+    var opts=DICONS.map(function(o){return'<option value="'+o[0]+'"'+(b.icon===o[0]?" selected":"")+'>'+o[1]+'</option>'}).join("");
+    return '<div class="drow'+(b.enabled===false?" off":"")+'">'+
+    '<div class="dh"><span class="dbadge">'+(i+1)+'</span><b>'+esc(b.label||"(tombol tanpa nama)")+'</b><span class="dopts">'+
+    '<label><input type="checkbox" '+(b.enabled===false?"":"checked")+' onchange="togBtn('+i+',this.checked)">Aktif</label>'+
+    '<button class="btn ghost sm" onclick="moveBtn('+i+',-1)" aria-label="Pindah ke atas">↑</button>'+
+    '<button class="btn ghost sm" onclick="moveBtn('+i+',1)" aria-label="Pindah ke bawah">↓</button>'+
+    '<button class="btn danger sm" onclick="delBtn('+i+')">Hapus</button></span></div>'+
+    '<div class="row">'+
+    '<div class="f" style="margin-bottom:0"><label>Ikon</label><select onchange="S.dash.buttons['+i+'].icon=this.value;ch();dashRows()">'+opts+'</select></div>'+
+    '<div class="f" style="margin-bottom:0"><label>Judul tombol</label><input type="text" value="'+esc(b.label||"")+'" oninput="S.dash.buttons['+i+'].label=this.value;ch()"></div>'+
+    '<div class="f" style="margin-bottom:0"><label>Deskripsi kecil</label><input type="text" value="'+esc(b.sub||"")+'" oninput="S.dash.buttons['+i+'].sub=this.value;ch()"></div>'+
+    '<div class="f" style="margin-bottom:0"><label>Tautan / URL</label><input type="text" placeholder="https://… atau index.html" value="'+esc(b.href||"")+'" oninput="S.dash.buttons['+i+'].href=this.value;ch()"><p class="h">Kosongkan untuk tombol WhatsApp atau tombol yang belum aktif.</p></div>'+
+    '</div></div>';
+  }).join("");
+}
+function addBtn(){S.dash.buttons.push({icon:"globe",label:"",sub:"",href:"",enabled:true});ch();dashRows()}
+function delBtn(i){if(!confirm("Hapus tombol ini dari dashboard?"))return;S.dash.buttons.splice(i,1);ch();dashRows()}
+function moveBtn(i,d){var a=S.dash.buttons,j=i+d;if(j<0||j>=a.length)return;var t=a.splice(i,1)[0];a.splice(j,0,t);ch();dashRows()}
+function togBtn(i,on){S.dash.buttons[i].enabled=on;ch();dashRows()}
+function refDash(){$("#main").innerHTML=vDash();dashRows()}
+function upDashLogo(f){
+  if(!f)return;toast("Mengunggah logo dashboard…");
+  pngShrink(f,900).then(function(d){
+    var name="foto/logo-"+Date.now().toString(36)+".png";
+    return api("/contents/"+name,{method:"PUT",body:{message:"Tambah logo dashboard via panel admin",content:d.split(",")[1]}}).then(function(){S.prev[name]=d;S.dash.logo=name;ch();refDash();toast("Logo diunggah. Klik Simpan dashboard untuk menayangkannya.")})
+  }).catch(function(e){toast(errMsg(e),1)})
+}
+function saveD(){
+  var d=S.dash;
+  d.brand=String(d.brand||"").trim();d.tagline=String(d.tagline||"").trim();d.footer=String(d.footer||"").trim();d.wa_text=String(d.wa_text||"").trim();
+  d.buttons=(d.buttons||[]).filter(function(b){return b&&(String(b.label||"").trim()||String(b.href||"").trim()||b.icon)}).map(function(b){
+    return{icon:b.icon||"globe",label:String(b.label||"").trim(),sub:String(b.sub||"").trim(),href:String(b.href||"").trim(),enabled:b.enabled!==false};
+  });
+  if(!d.buttons.length){toast("Tambahkan minimal satu tombol.",1);return}
+  var b=$("#sd");b.disabled=true;b.textContent="Menyimpan…";
+  put("data/dashboard.json",JSON.stringify(d,null,2)+"\n",S.shaD,"Update dashboard via panel admin").then(function(s){S.shaD=s;S.dirty=false;toast("Dashboard tersimpan. Tampil sekitar 1 menit.");render()}).catch(function(e){b.disabled=false;b.textContent="Simpan dashboard";toast(errMsg(e),1)})
+}
+
 /* bantuan */
 function vHelp(){
   return '<div class="top"><div><h1>Bantuan & Panduan</h1><p class="sub">Langkah demi langkah memakai panel admin, dari masuk sampai villa tampil di website.</p></div><a class="btn ghost" href="../" target="_blank" rel="noopener">Lihat website</a></div>'+
@@ -411,6 +502,13 @@ function vHelp(){
   '<li><b>Nomor WhatsApp</b><span>Tujuan tombol Pesan lewat WhatsApp. Awali 62, tanpa angka 0 di depan, tanpa spasi atau tanda plus. Contoh: 6281234567890.</span></li>'+
   '<li><b>Email</b><span>Alamat yang tampil di footer website.</span></li>'+
   '</ul><p class="d" style="margin-top:12px">Jangan lupa klik Simpan pengaturan setelah mengubah bagian ini.</p></div>'+
+  '<div class="card"><h2>Menu Dashboard</h2><p class="d">Pengaturan halaman tautan ringkas <b>dashboard.html</b>: logo bulat, nama, tagline, dan tombol-tautan.</p><ul class="kv">'+
+  '<li><b>Nama usaha dan Tagline</b><span>Judul besar dan kalimat kecil di tengah dashboard.</span></li>'+
+  '<li><b>Logo bulat</b><span>Unggah PNG transparan; jika kosong memakai logo dari Pengaturan Website, lalu ikon bawaan.</span></li>'+
+  '<li><b>Teks footer</b><span>Kalimat kecil paling bawah. Kosongkan untuk mengikuti tagline.</span></li>'+
+  '<li><b>Pesan WhatsApp</b><span>Teks otomatis saat pengunjung menekan tombol WhatsApp. Nomor mengikuti Nomor WhatsApp di Pengaturan Website.</span></li>'+
+  '<li><b>Tombol tautan</b><span>Pilih ikon (Katalog, Food, TikTok, WhatsApp, YouTube, Tautan lain), isi judul, deskripsi kecil, dan URL. Tombol bisa diaktifkan/nonaktifkan, diurutkan naik/turun, ditambah, dan dihapus. URL kosong menampilkan tombol redup "segera hadir"; alamat website utama diisi index.html.</span></li>'+
+  '</ul><p class="d" style="margin-top:12px">Klik Simpan dashboard setelah mengubah. Alamat halaman: <b>dashboard.html</b> di folder website.</p></div>'+
   '<div class="card"><h2>Pertanyaan umum</h2>'+
   '<div class="qa"><b>Perubahan belum muncul di website?</b><p>Tunggu sekitar 1 menit setelah Simpan, lalu muat ulang dengan Ctrl + F5. GitHub Pages membutuhkan waktu singkat untuk membangun ulang.</p></div>'+
   '<div class="qa"><b>Bedanya panel admin dengan file website?</b><p>Panel ini hanya mengisi data (daftar villa, pengaturan, dan foto) lewat GitHub. Tata letak, warna, dan tombol pada halaman diatur pada file index.html dan admin/index.html yang diubah melalui git.</p></div>'+

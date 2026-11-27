@@ -13,13 +13,6 @@
       "enabled": true
     },
     {
-      "icon": "food",
-      "label": "Food",
-      "sub": "Menu makanan dan katering",
-      "href": "",
-      "enabled": true
-    },
-    {
       "icon": "tiktok",
       "label": "TikTok",
       "sub": "Ikuti keseruan di TikTok",
@@ -27,16 +20,16 @@
       "enabled": true
     },
     {
-      "icon": "wa",
-      "label": "WhatsApp",
-      "sub": "Balas cepat pemesanan villa",
+      "icon": "yt",
+      "label": "YouTube",
+      "sub": "Tonton video villa",
       "href": "",
       "enabled": true
     },
     {
-      "icon": "yt",
-      "label": "YouTube",
-      "sub": "Tonton video villa",
+      "icon": "wa",
+      "label": "WhatsApp",
+      "sub": "Balas cepat pemesanan villa",
       "href": "",
       "enabled": true
     }

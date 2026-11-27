@@ -106,7 +106,7 @@ input,textarea{transition:border-color .2s ease,box-shadow .2s ease}
 .steps{margin:0;padding-left:20px}
 .steps.tut{list-style:none;padding-left:2px}
 .steps li{margin-bottom:12px}
-.steps li b{display:block;margin-bottom:2px}
+.steps li b{display:block;margin-bottom:2px;font-size:.95rem}
 .kv{list-style:none;margin:0;padding:0}
 .kv li{padding:8px 0;border-bottom:1px dashed var(--l)}
 .kv li:last-child{border-bottom:0}
@@ -476,50 +476,61 @@ function saveD(){
 
 /* bantuan */
 function vHelp(){
-  return '<div class="top"><div><h1>Bantuan & Panduan</h1><p class="sub">Langkah demi langkah memakai panel admin, dari masuk sampai villa tampil di website.</p></div><a class="btn ghost" href="../" target="_blank" rel="noopener">Lihat website</a></div>'+
-  '<div class="card"><h2>Ringkasan cara kerja</h2><ol class="steps"><li><b>Masuk panel</b>Buka halaman admin website, isi Login User dan Password (token GitHub), lalu klik Masuk.</li><li><b>Isi data</b>Tambah atau ubah villa di menu Daftar Villa, atau atur tampilan umum di Pengaturan Website.</li><li><b>Simpan</b>Klik Simpan villa atau Simpan pengaturan. Data disimpan ke repository GitHub.</li><li><b>Tunggu dan muat ulang</b>Website diperbarui otomatis sekitar 1 menit. Buka website lalu tekan Ctrl + F5 untuk melihat hasil terbaru.</li></ol></div>'+
-  '<div class="card"><h2>Tutorial cepat: menambahkan villa baru</h2><ol class="steps tut">'+
-  '<li><b>Langkah 1 — Daftar Villa</b>Klik menu Daftar Villa di sidebar, lalu klik tombol + Tambah villa.</li>'+
-  '<li><b>Langkah 2 — Informasi dasar</b>Isi Nama villa; pilih atau ketik Kategori (kategori baru otomatis jadi tombol filter di website); isi Lokasi opsional berupa alamat atau tautan Google Maps.</li>'+
-  '<li><b>Langkah 3 — Kapasitas dan harga</b>Isi jumlah tamu dan kamar. Di bagian Harga per malam tambah baris misalnya Weekday dan Weekend, isi angka saja tanpa titik.</li>'+
-  '<li><b>Langkah 4 — Deskripsi, fasilitas, dan foto</b>Tulis deskripsi singkat; ketik fasilitas lalu tekan Enter atau klik saran; klik area unggah foto (boleh pilih beberapa sekaligus) — foto pertama menjadi foto sampul.</li>'+
-  '<li><b>Langkah 5 — Kalender dan simpan</b>Klik tanggal untuk menandai villa penuh, lalu klik Simpan villa. Tunggu sekitar 1 menit dan muat ulang website dengan Ctrl + F5.</li>'+
+  return '<div class="top"><div><h1>Bantuan & Panduan</h1><p class="sub">Panduan singkat memakai panel admin: masuk, isi data, simpan, lalu cek website.</p></div><a class="btn ghost" href="../" target="_blank" rel="noopener">Lihat website</a></div>'+
+  '<div class="card"><h2>Cara kerja singkat</h2><ol class="steps">'+
+  '<li><b>Masuk panel</b>Buka halaman admin, isi Login User dan Password (token GitHub), lalu klik Masuk.</li>'+
+  '<li><b>Isi data</b>Tambah atau ubah villa di Daftar Villa; atur tampilan di Pengaturan Website; atur tombol di Dashboard.</li>'+
+  '<li><b>Simpan</b>Klik Simpan villa, Simpan pengaturan, atau Simpan dashboard.</li>'+
+  '<li><b>Tunggu dan muat ulang</b>Tunggu sekitar 1 menit, buka website, lalu tekan Ctrl + F5.</li>'+
   '</ol></div>'+
-  '<div class="card"><h2>Arti kolom pada form villa</h2><ul class="kv">'+
-  '<li><b>Nama villa</b><span>Judul kartu di daftar villa dan judul jendela detail.</span></li>'+
-  '<li><b>Kategori</b><span>Menjadi tombol filter di halaman Kategori website. Ketik nama baru untuk membuat kategori baru.</span></li>'+
-  '<li><b>Lokasi (opsional)</b><span>Boleh diisi alamat (mis. Jl. Raya Puncak No. 123) atau tautan Google Maps. Tampil sebagai tombol lokasi yang bisa diklik pengunjung menuju peta. Kosongkan bila tidak diperlukan.</span></li>'+
-  '<li><b>Kapasitas tamu / Jumlah kamar</b><span>Jumlah tamu maksimal dan banyak kamar tidur, tampil di kartu villa.</span></li>'+
-  '<li><b>Harga per malam</b><span>Bisa lebih dari satu baris, mis. Weekday dan Weekend. Angka ditulis tanpa titik atau Rp.</span></li>'+
-  '<li><b>Deskripsi</b><span>Penjelasan singkat villa, tampil di jendela detail saat foto diklik.</span></li>'+
-  '<li><b>Fasilitas</b><span>Daftar centang di jendela detail. Jika dikosongkan, website memakai fasilitas bawaan kategori.</span></li>'+
-  '<li><b>Foto villa</b><span>Foto pertama menjadi sampul kartu. Keterangan foto tampil di thumbnail jendela detail. Foto otomatis diperkecil agar website cepat.</span></li>'+
-  '<li><b>Kalender ketersediaan</b><span>Klik tanggal untuk menandai penuh (dicoret); klik lagi untuk mengosongkan. Pengunjung melihat kalender yang sama di jendela detail.</span></li>'+
+  '<div class="card"><h2>Tutorial singkat: menambah villa</h2><ol class="steps tut">'+
+  '<li><b>1. Daftar Villa</b>Klik menu Daftar Villa, lalu tombol + Tambah villa.</li>'+
+  '<li><b>2. Nama, kategori, lokasi</b>Isi Nama villa dan Kategori. Lokasi boleh kosong; kalau diisi boleh alamat atau tautan Google Maps.</li>'+
+  '<li><b>3. Tamu, kamar, harga</b>Isi jumlah tamu dan kamar. Tambah baris harga, mis. Weekday dan Weekend. Ketik angka saja tanpa titik.</li>'+
+  '<li><b>4. Deskripsi, fasilitas, foto</b>Tulis deskripsi singkat; tambah fasilitas lalu tekan Enter; unggah foto boleh banyak sekaligus. Foto pertama jadi sampul.</li>'+
+  '<li><b>5. Kalender dan simpan</b>Klik tanggal yang sedang penuh, lalu klik Simpan villa. Tunggu sekitar 1 menit dan muat ulang dengan Ctrl + F5.</li>'+
+  '</ol></div>'+
+  '<div class="card"><h2>Arti kolom di form villa</h2><ul class="kv">'+
+  '<li><b>Nama villa</b><span>Judul kartu dan jendela detail.</span></li>'+
+  '<li><b>Kategori</b><span>Nama tombol filter di website. Ketik nama baru untuk membuat kategori baru.</span></li>'+
+  '<li><b>Lokasi (opsional)</b><span>Boleh alamat atau tautan Google Maps. Pengunjung klik untuk membuka peta.</span></li>'+
+  '<li><b>Tamu dan kamar</b><span>Kapasitas maksimal tamu dan jumlah kamar tidur.</span></li>'+
+  '<li><b>Harga per malam</b><span>Boleh lebih dari satu baris, mis. Weekday dan Weekend. Angka ditulis tanpa titik atau Rp.</span></li>'+
+  '<li><b>Deskripsi</b><span>Penjelasan singkat yang tampil di jendela detail.</span></li>'+
+  '<li><b>Fasilitas</b><span>Daftar centang di jendela detail. Jika kosong, dipakai fasilitas bawaan kategori.</span></li>'+
+  '<li><b>Foto villa</b><span>Foto pertama jadi sampul. Ukuran foto otomatis dikecilkan agar website cepat.</span></li>'+
+  '<li><b>Kalender</b><span>Klik tanggal untuk menandai penuh; klik lagi untuk membatalkan.</span></li>'+
   '</ul></div>'+
-  '<div class="card"><h2>Menu Pengaturan Website</h2><p class="d">Pengaturan ini mengisi halaman depan dan kontak, bukan data villa.</p><ul class="kv">'+
+  '<div class="card"><h2>Menu Pengaturan Website</h2><ul class="kv">'+
   '<li><b>Nama website dan Tagline</b><span>Teks di header kiri atas dan judul tab browser.</span></li>'+
-  '<li><b>Judul besar dan Teks pendukung</b><span>Konten banner paling atas website.</span></li>'+
-  '<li><b>Foto latar banner</b><span>Pilih foto landscape (melebar) yang terang. Jika kosong, banner memakai warna hijau bawaan.</span></li>'+
-  '<li><b>Bagian Tentang</b><span>Judul, isi perkenalan, nama dan jabatan pengelola, serta logo atau foto kotak besar.</span></li>'+
-  '<li><b>Nomor WhatsApp</b><span>Tujuan tombol Pesan lewat WhatsApp. Awali 62, tanpa angka 0 di depan, tanpa spasi atau tanda plus. Contoh: 6281234567890.</span></li>'+
-  '<li><b>Email</b><span>Alamat yang tampil di footer website.</span></li>'+
-  '</ul><p class="d" style="margin-top:12px">Jangan lupa klik Simpan pengaturan setelah mengubah bagian ini.</p></div>'+
-  '<div class="card"><h2>Menu Dashboard</h2><p class="d">Pengaturan halaman tautan ringkas <b>dashboard.html</b>: logo bulat, nama, tagline, dan tombol-tautan.</p><ul class="kv">'+
+  '<li><b>Judul besar dan Teks pendukung</b><span>Isi banner paling atas website.</span></li>'+
+  '<li><b>Foto banner</b><span>Foto landscape yang terang. Jika kosong, dipakai warna hijau bawaan.</span></li>'+
+  '<li><b>Bagian Tentang</b><span>Judul, isi perkenalan, nama dan jabatan pengelola, serta logo atau foto kotak.</span></li>'+
+  '<li><b>Nomor WhatsApp</b><span>Tujuan tombol Pesan. Awali 62, tanpa angka 0 di depan.</span></li>'+
+  '<li><b>Email</b><span>Alamat yang tampil di footer.</span></li>'+
+  '</ul><p class="d" style="margin-top:12px">Klik Simpan pengaturan setelah mengubah bagian ini.</p></div>'+
+  '<div class="card"><h2>Menu Dashboard (dashboard.html)</h2><ul class="kv">'+
   '<li><b>Nama usaha dan Tagline</b><span>Judul besar dan kalimat kecil di tengah dashboard.</span></li>'+
-  '<li><b>Logo bulat</b><span>Unggah PNG transparan; jika kosong memakai logo dari Pengaturan Website, lalu ikon bawaan.</span></li>'+
+  '<li><b>Logo bulat</b><span>PNG transparan paling bagus. Jika kosong, dipakai logo dari Pengaturan Website.</span></li>'+
   '<li><b>Teks footer</b><span>Kalimat kecil paling bawah. Kosongkan untuk mengikuti tagline.</span></li>'+
-  '<li><b>Pesan WhatsApp</b><span>Teks otomatis saat pengunjung menekan tombol WhatsApp. Nomor mengikuti Nomor WhatsApp di Pengaturan Website.</span></li>'+
-  '<li><b>Tombol tautan</b><span>Pilih ikon (Katalog, Food, TikTok, WhatsApp, YouTube, Tautan lain), isi judul, deskripsi kecil, dan URL. Tombol bisa diaktifkan/nonaktifkan, diurutkan naik/turun, ditambah, dan dihapus. URL kosong menampilkan tombol redup "segera hadir"; alamat website utama diisi index.html.</span></li>'+
-  '</ul><p class="d" style="margin-top:12px">Klik Simpan dashboard setelah mengubah. Alamat halaman: <b>dashboard.html</b> di folder website.</p></div>'+
+  '<li><b>Pesan WhatsApp</b><span>Teks otomatis saat tombol WhatsApp ditekan. Nomor mengikuti Pengaturan Website.</span></li>'+
+  '<li><b>Tombol tautan</b><span>Isi ikon, judul, deskripsi, dan URL. Bisa diaktifkan, diurut naik/turun, ditambah, dan dihapus.</span></li>'+
+  '<li><b>URL kosong</b><span>Tombol tampil redup "segera hadir". Tombol WhatsApp tidak perlu URL.</span></li>'+
+  '</ul><p class="d" style="margin-top:12px">Klik Simpan dashboard setelah mengubah. Alamat halaman: <b>dashboard.html</b>.</p></div>'+
   '<div class="card"><h2>Pertanyaan umum</h2>'+
-  '<div class="qa"><b>Perubahan belum muncul di website?</b><p>Tunggu sekitar 1 menit setelah Simpan, lalu muat ulang dengan Ctrl + F5. GitHub Pages membutuhkan waktu singkat untuk membangun ulang.</p></div>'+
-  '<div class="qa"><b>Bedanya panel admin dengan file website?</b><p>Panel ini hanya mengisi data (daftar villa, pengaturan, dan foto) lewat GitHub. Tata letak, warna, dan tombol pada halaman diatur pada file index.html dan admin/index.html yang diubah melalui git.</p></div>'+
-  '<div class="qa"><b>Bagaimana cara menghapus villa?</b><p>Di Daftar Villa klik tombol Hapus pada kartu villa. Tindakan ini tidak bisa dibatalkan dari panel.</p></div>'+
-  '<div class="qa"><b>Foto dihapus dari villa, hilang permanen?</b><p>Tidak. Foto berhenti tampil di website, tetapi filenya masih tersimpan di folder foto repository.</p></div>'+
-  '<div class="qa"><b>Password (token) boleh dibagikan?</b><p>Jangan. Token seperti kata sandi. Jika bocor, hapus token lama di GitHub, buat token baru dengan izin Contents: Read and write, lalu login ulang.</p></div>'+
-  '<div class="qa"><b>Tombol Batal dan perubahan belum tersimpan?</b><p>Jika ada isian yang belum disimpan lalu pindah menu, panel akan mengingatkan. Pilih tinggalkan untuk membuang perubahan, atau kembali dan Simpan.</p></div>'+
+  '<div class="qa"><b>Perubahan belum muncul di website?</b><p>Tunggu sekitar 1 menit setelah Simpan, lalu muat ulang dengan Ctrl + F5.</p></div>'+
+  '<div class="qa"><b>Cara menghapus villa?</b><p>Di Daftar Villa klik Hapus pada kartu villa. Tindakan ini tidak bisa dibatalkan dari panel.</p></div>'+
+  '<div class="qa"><b>Foto yang dihapus hilang permanen?</b><p>Tidak. Foto berhenti tampil, tetapi filenya masih tersimpan di folder foto repository.</p></div>'+
+  '<div class="qa"><b>Token (password panel) boleh dibagikan?</b><p>Jangan; anggap seperti kata sandi. Jika bocor, buat token baru di GitHub dengan izin Contents: Read and write, lalu login ulang.</p></div>'+
+  '<div class="qa"><b>Pindah menu padahal belum menyimpan?</b><p>Panel akan mengingatkan. Pilih tinggalkan untuk membuang perubahan, atau kembali lalu Simpan.</p></div>'+
   '</div>'+
-  '<div class="card"><h2>Tips & perawatan</h2><ul class="help"><li>Gunakan nama kategori yang konsisten agar tombol filter di website rapi.</li><li>Foto sampul sebaiknya landscape dan terang agar kartu terlihat menarik.</li><li>Unggah beberapa sudut ruangan (tamu, kamar, dapur, kolam) agar calon tamu yakin sebelum memesan.</li><li>Perbarui kalender secara rutin agar tanggal penuh tidak terlihat kosong.</li><li>Simpan secara berkala setelah mengisi banyak kolom agar tidak hilang saat pindah halaman.</li></ul></div>'
+  '<div class="card"><h2>Tips singkat</h2><ul class="help">'+
+  '<li>Pakai nama kategori yang konsisten agar tombol filter di website rapi.</li>'+
+  '<li>Foto sampul sebaiknya landscape dan terang.</li>'+
+  '<li>Unggah beberapa sudut ruangan, mis. ruang tamu, kamar, dapur, dan kolam.</li>'+
+  '<li>Perbarui kalender secara rutin agar tanggal penuh akurat.</li>'+
+  '<li>Simpan berkala setelah mengisi banyak kolom agar tidak hilang.</li>'+
+  '</ul></div>'
 }
 
 /* mulai */

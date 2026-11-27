@@ -67,8 +67,8 @@ h2{font-size:clamp(1.55rem,3.2vw,2.15rem);font-weight:800;letter-spacing:-.015em
 .villa{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;min-width:0;transition:transform .28s ease,box-shadow .28s ease}
 .villa:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
 .villa:focus-visible{outline:3px solid var(--green);outline-offset:2px}
-.pic{position:relative;height:196px;display:flex;align-items:flex-end;padding:14px;color:#fff;font-size:.82rem;font-weight:600;transition:filter .28s ease}
-.villa:hover .pic{filter:brightness(1.06)}
+.pic{position:relative;height:196px;display:flex;align-items:flex-end;padding:14px;color:#fff;font-size:.82rem;font-weight:600;transition:filter .28s ease,transform .32s ease}
+.villa:hover .pic{filter:brightness(1.06);transform:scale(1.03)}
 .pic span{background:rgba(11,61,46,.72);backdrop-filter:blur(4px);padding:5px 13px;border-radius:999px}
 .villa .body{padding:18px 18px 16px;min-width:0}
 .villa h3{margin:0 0 8px;font-size:1.18rem;font-weight:700}
@@ -117,7 +117,7 @@ footer p{margin:8px 0 0;color:#a9c8b8;max-width:42ch}
 /* ===== dialog ===== */
 dialog{border:0;padding:0;border-radius:22px;width:min(780px,94vw);max-height:92vh;background:var(--surface);color:var(--ink);overflow:auto;box-shadow:var(--shadow-lg)}
 dialog::backdrop{background:rgba(8,26,19,.62);backdrop-filter:blur(3px)}
-.x{position:absolute;top:12px;right:12px;z-index:3;width:38px;height:38px;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;transition:background-color .2s ease}
+.x{position:absolute;top:12px;right:12px;z-index:3;width:38px;height:38px;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;transition:background-color .2s ease,transform .15s ease}
 .x:hover{background:rgba(0,0,0,.8)}
 .main{height:min(52vw,360px);background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:16px;color:#fff;font-weight:600}
 .main span{background:rgba(11,61,46,.72);padding:5px 14px;border-radius:999px;font-size:.85rem}
@@ -161,6 +161,21 @@ dialog[open]{animation:pop .3s ease}
 dialog[open]::backdrop{animation:fade .3s ease}
 .js .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .js .rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
+/* efek saat tombol ditekan */
+.btn:active{transform:translateY(1px) scale(.965);box-shadow:0 6px 16px rgba(14,122,85,.26)}
+.btn.ghost:active{transform:scale(.965);background:rgba(255,255,255,.26)}
+nav a:active{transform:scale(.95)}
+.chip:active{transform:scale(.94)}
+.meta a.loc:active{transform:scale(.94)}
+.villa:active{transform:translateY(-2px) scale(.99)}
+.wa-btn:active{transform:scale(.96)}
+.th:active{transform:scale(.94)}
+.calh button:active:not(:disabled){transform:scale(.9)}
+.x:active{transform:scale(.9)}
+/* header berbayang saat digulir */
+.site{transition:box-shadow .3s ease}
+.site.scrolled{box-shadow:0 10px 26px rgba(13,61,46,.14)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .js .rv{opacity:1;transform:none}
@@ -210,20 +225,20 @@ dialog[open]::backdrop{animation:fade .3s ease}
 
 <main>
 <section id="kategori">
-  <div class="wrap rv">
-    <div class="sec-head">
+  <div class="wrap">
+    <div class="sec-head rv d1">
       <h2>Pilih kategori villa</h2>
       <p class="lead">Klik kategori untuk menyaring daftar villa yang tersedia.</p>
     </div>
-    <div class="chips" id="chips" role="group" aria-label="Kategori villa"></div>
-    <div class="grid" id="grid" aria-live="polite"></div>
+    <div class="chips rv d2" id="chips" role="group" aria-label="Kategori villa"></div>
+    <div class="grid rv d3" id="grid" aria-live="polite"></div>
   </div>
 </section>
 
 <section id="tentang">
-  <div class="wrap about rv">
-    <div class="photo"><div class="badge"><b>10+</b>Tahun<br>pengalaman</div></div>
-    <div>
+  <div class="wrap about">
+    <div class="photo rv d1"><div class="badge"><b>10+</b>Tahun<br>pengalaman</div></div>
+    <div class="rv d2">
       <h2 data-s="about_title"></h2>
       <p class="lead" data-s="about_text"></p>
       <p class="manager"><span class="av" aria-hidden="true">MA</span><span><b data-s="manager_name"></b><span data-s="manager_role"></span></span></p>
@@ -233,13 +248,13 @@ dialog[open]::backdrop{animation:fade .3s ease}
 </main>
 
 <footer id="kontak">
-  <div class="wrap rv">
+  <div class="wrap">
     <div class="foot-in">
-      <div>
+      <div class="rv d1">
         <b>Pesan villa Anda sekarang</b>
         <p>Tersedia untuk menginap harian, akhir pekan, dan musim liburan. Balas secepatnya melalui WhatsApp.</p>
       </div>
-      <div class="foot-cta">
+      <div class="foot-cta rv d2">
         <a class="wa-btn" id="fwa" href="#">
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2zm0 18.1h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.63.8-.77.97-.14.16-.28.18-.53.06-.25-.12-1.05-.38-1.99-1.23-.73-.66-1.22-1.47-1.37-1.72-.14-.24-.02-.37.11-.51.11-.11.24-.28.36-.42.12-.14.16-.25.24-.41.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.16 0-.43.06-.66.31-.22.24-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.16 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
           <span><em>Balas cepat via WhatsApp</em><b data-s="wa"></b></span>
@@ -247,7 +262,7 @@ dialog[open]::backdrop{animation:fade .3s ease}
         <a class="mail-link" id="fem" data-s="email" href="#"></a>
       </div>
     </div>
-    <p class="copy">© <span id="yr"></span> Villa OtW.yUkS — Sewa villa harian Puncak. Seluruh foto dan konten adalah milik pengelola villa.</p>
+    <p class="copy rv d3">© <span id="yr"></span> Villa OtW.yUkS — Sewa villa harian Puncak. Seluruh foto dan konten adalah milik pengelola villa.</p>
   </div>
 </footer>
 
@@ -368,7 +383,7 @@ Promise.all([loadJSON("data/villas.json"),loadJSON("data/settings.json")]).then(
   if(S.brand)document.title=S.brand+" – "+(S.tagline||"");
   WA=S.wa||"";
   if(S.about_logo){var ph=document.querySelector(".photo");if(ph){var li=document.createElement("img");li.alt=S.brand||"Logo";li.src=encodeURI(S.about_logo);ph.insertBefore(li,ph.firstChild)}}
-  if(S.hero_image){document.querySelector(".hero").style.background="linear-gradient(90deg,rgba(0,0,0,.52) 0%,rgba(0,0,0,.22) 55%,rgba(0,0,0,.06) 100%),linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.30) 100%),url('"+encodeURI(S.hero_image)+"') center/cover no-repeat"}
+  if(S.hero_image){document.querySelector(".hero").style.background="linear-gradient(90deg,rgba(0,0,0,.52) 0%,rgba(0,0,0,.22) 55%,rgba(0,0,0,.06) 100%),linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,.30) 100%),url('"+encodeURI(S.hero_image)+"') center/cover no-repeat,linear-gradient(160deg,#0b3d2e 0%,#10664a 55%,#0f766e 100%)"}
   document.getElementById("fwa").href="https://wa.me/"+WA;
   document.getElementById("fem").href="mailto:"+(S.email||"");
   var yr=document.getElementById("yr");if(yr)yr.textContent=new Date().getFullYear();
@@ -395,6 +410,9 @@ Promise.all([loadJSON("data/villas.json"),loadJSON("data/settings.json")]).then(
     goTo(Math.max(0,el.getBoundingClientRect().top+window.pageYOffset-off));
     try{history.replaceState(null,"","#"+id)}catch(x){}
   });
+  var site=document.querySelector(".site");
+  function syncHead(){if(site)site.classList.toggle("scrolled",window.pageYOffset>10)}
+  syncHead();window.addEventListener("scroll",syncHead,{passive:true});
   var els=document.querySelectorAll(".rv");
   if(!("IntersectionObserver" in window)){els.forEach(function(x){x.classList.add("in")});return}
   var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}})},{threshold:.12});
